@@ -1,0 +1,154 @@
+// Quantum standard library -- vec.qtm
+// Dynamic growable int array backed by heap memory.
+//
+// IMPORTANT: All mutation functions return the updated VecInt.
+// You MUST reassign: v = vec_push(v, 10)  NOT  vec_push(v, 10)
+// This is because Quantum passes structs by value (like early C).
+
+struct VecInt {
+    ptr: i64,
+    len: int,
+    cap: int,
+}
+
+fn vec_new() -> VecInt {
+    let cap = 4
+    let ptr = q_alloc(cap * 8)
+    return VecInt { ptr: ptr, len: 0, cap: cap }
+}
+
+fn vec_push(v: VecInt, value: int) -> VecInt {
+    let mut new_ptr: i64 = v.ptr
+    let mut new_cap = v.cap
+    if v.len >= v.cap {
+        new_cap = v.cap * 2
+        new_ptr = q_realloc(v.ptr, new_cap * 8)
+    }
+    q_write_i64(new_ptr, v.len, value)
+    return VecInt { ptr: new_ptr, len: v.len + 1, cap: new_cap }
+}
+
+fn vec_get(v: VecInt, idx: int) -> Result<int, string> {
+    if idx < 0 || idx >= v.len {
+        return Err("Index out of bounds")
+    }
+    return Ok(q_read_i64(v.ptr, idx))
+}
+
+fn vec_get_unchecked(v: VecInt, idx: int) -> int {
+    return q_read_i64(v.ptr, idx)
+}
+
+fn vec_set(v: VecInt, idx: int, value: int) -> VecInt {
+    if idx >= 0 && idx < v.len {
+        q_write_i64(v.ptr, idx, value)
+    }
+    return v
+}
+
+fn vec_len(v: VecInt) -> int {
+    return v.len
+}
+
+fn vec_is_empty(v: VecInt) -> bool {
+    return v.len == 0
+}
+
+fn vec_pop(v: VecInt) -> VecInt {
+    if v.len > 0 {
+        return VecInt { ptr: v.ptr, len: v.len - 1, cap: v.cap }
+    }
+    return v
+}
+
+fn vec_pop_value(v: VecInt) -> Result<int, string> {
+    if v.len == 0 {
+        return Err("Cannot pop from empty vector")
+    }
+    return Ok(q_read_i64(v.ptr, v.len - 1))
+}
+
+fn vec_contains(v: VecInt, value: int) -> bool {
+    let mut i = 0
+    while i < v.len {
+        if q_read_i64(v.ptr, i) == value {
+            return true
+        }
+        i += 1
+    }
+    return false
+}
+
+fn vec_sum(v: VecInt) -> int {
+    let mut total = 0
+    let mut i = 0
+    while i < v.len {
+        total += q_read_i64(v.ptr, i)
+        i += 1
+    }
+    return total
+}
+
+fn vec_max(v: VecInt) -> Result<int, string> {
+    if v.len == 0 {
+        return Err("Cannot find max of empty vector")
+    }
+    let mut m = q_read_i64(v.ptr, 0)
+    let mut i = 1
+    while i < v.len {
+        let val = q_read_i64(v.ptr, i)
+        if val > m {
+            m = val
+        }
+        i += 1
+    }
+    return Ok(m)
+}
+
+fn vec_min(v: VecInt) -> Result<int, string> {
+    if v.len == 0 {
+        return Err("Cannot find min of empty vector")
+    }
+    let mut m = q_read_i64(v.ptr, 0)
+    let mut i = 1
+    while i < v.len {
+        let val = q_read_i64(v.ptr, i)
+        if val < m {
+            m = val
+        }
+        i += 1
+    }
+    return Ok(m)
+}
+
+fn vec_sort(v: VecInt) -> VecInt {
+    let mut i = 1
+    while i < v.len {
+        let key = q_read_i64(v.ptr, i)
+        let mut j = i - 1
+        while j >= 0 && q_read_i64(v.ptr, j) > key {
+            q_write_i64(v.ptr, j + 1, q_read_i64(v.ptr, j))
+            j = j - 1
+        }
+        q_write_i64(v.ptr, j + 1, key)
+        i += 1
+    }
+    return v
+}
+
+fn vec_reverse(v: VecInt) -> VecInt {
+    let mut lo = 0
+    let mut hi = v.len - 1
+    while lo < hi {
+        let tmp = q_read_i64(v.ptr, lo)
+        q_write_i64(v.ptr, lo, q_read_i64(v.ptr, hi))
+        q_write_i64(v.ptr, hi, tmp)
+        lo += 1
+        hi = hi - 1
+    }
+    return v
+}
+
+fn vec_free(v: VecInt) {
+    q_free(v.ptr)
+}

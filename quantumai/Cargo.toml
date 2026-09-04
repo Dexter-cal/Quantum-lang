@@ -1,0 +1,38 @@
+[package]
+name = "quantumai"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+colored.workspace = true
+
+[[example]]
+name = "ml_demo"
+path = "examples/ml_demo.rs"
+
+[[example]]
+name = "debug_train"
+path = "examples/debug_train.rs"
+
+[[example]]
+name = "full_demo"
+path = "examples/full_demo.rs"
+
+[[example]]
+name = "showcase"
+path = "examples/showcase.rs"
+
+[[example]]
+name = "complete_test"
+path = "examples/complete_test.rs"
+
+[[example]]
+name = "diag"
+path = "examples/diag.rs"
+
+[[example]]
+name = "new_features"
+path = "examples/new_features.rs"

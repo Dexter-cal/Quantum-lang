@@ -1,0 +1,977 @@
+[
+  {
+    "input": "hello",
+    "output": "Hello! I'm QuantumMind \u2014 your AI assistant for Quantum programming and cybersecurity. What can I help you with?",
+    "category": "conversation"
+  },
+  {
+    "input": "hi",
+    "output": "Hi there! Ready to help with Quantum code, AI models, or cybersecurity. Just ask!",
+    "category": "conversation"
+  },
+  {
+    "input": "good morning",
+    "output": "Good morning! What are we building today?",
+    "category": "conversation"
+  },
+  {
+    "input": "who are you",
+    "output": "I'm QuantumMind v1.0 \u2014 the AI assistant built INTO Quantum Language. I know Quantum syntax, QuantumAI, and cybersecurity. I was trained using QuantumAI itself!",
+    "category": "conversation"
+  },
+  {
+    "input": "what can you do",
+    "output": "I can:\n\u2022 Write Quantum code from descriptions\n\u2022 Train AI models using QuantumAI\n\u2022 Explain ML and cybersecurity concepts\n\u2022 Debug your code\n\u2022 Build complete projects from one prompt\n\u2022 Find datasets\nJust ask anything!",
+    "category": "conversation"
+  },
+  {
+    "input": "how are you",
+    "output": "Running well! Knowledge base loaded, 20 reasoning rules active. What would you like to build?",
+    "category": "conversation"
+  },
+  {
+    "input": "thank you",
+    "output": "You're welcome! Let me know if you need anything else.",
+    "category": "conversation"
+  },
+  {
+    "input": "thanks",
+    "output": "No problem! Happy coding!",
+    "category": "conversation"
+  },
+  {
+    "input": "how do I print hello world",
+    "output": "fn main() {\n    println(\"Hello, Quantum World!\")\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "write print hello world",
+    "output": "fn main() {\n    println(\"Hello, Quantum World!\")\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I declare a variable",
+    "output": "let x = 42          // immutable\nlet mut y = 0       // mutable\nconst PI = 3.14     // constant",
+    "category": "syntax"
+  },
+  {
+    "input": "write declare a variable",
+    "output": "let x = 42          // immutable\nlet mut y = 0       // mutable\nconst PI = 3.14     // constant",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I write a function",
+    "output": "fn add(a: int, b: int) -> int {\n    return a + b\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "write write a function",
+    "output": "fn add(a: int, b: int) -> int {\n    return a + b\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I loop 10 times",
+    "output": "for i in 0..10 {\n    println(i)\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "write loop 10 times",
+    "output": "for i in 0..10 {\n    println(i)\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I write a while loop",
+    "output": "let mut i = 0\nwhile i < 10 {\n    i = i + 1\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "write write a while loop",
+    "output": "let mut i = 0\nwhile i < 10 {\n    i = i + 1\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I write if else",
+    "output": "if x > 0 {\n    println(\"positive\")\n} else {\n    println(\"negative\")\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "write write if else",
+    "output": "if x > 0 {\n    println(\"positive\")\n} else {\n    println(\"negative\")\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I create a struct",
+    "output": "struct Point { x: float, y: float }\nlet p = Point { x: 1.0, y: 2.0 }",
+    "category": "syntax"
+  },
+  {
+    "input": "write create a struct",
+    "output": "struct Point { x: float, y: float }\nlet p = Point { x: 1.0, y: 2.0 }",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I import quantumai",
+    "output": "use quantumai::*;\nuse quantumai::ml::*;\nuse quantumai::advanced::*;",
+    "category": "syntax"
+  },
+  {
+    "input": "write import quantumai",
+    "output": "use quantumai::*;\nuse quantumai::ml::*;\nuse quantumai::advanced::*;",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I concatenate strings",
+    "output": "let name = \"World\"\nprintln(\"Hello \" + name)",
+    "category": "syntax"
+  },
+  {
+    "input": "write concatenate strings",
+    "output": "let name = \"World\"\nprintln(\"Hello \" + name)",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I write a recursive function",
+    "output": "fn factorial(n: int) -> int {\n    if n <= 1 { return 1 }\n    return n * factorial(n - 1)\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "write write a recursive function",
+    "output": "fn factorial(n: int) -> int {\n    if n <= 1 { return 1 }\n    return n * factorial(n - 1)\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I use match expression",
+    "output": "match value {\n    0 => println(\"zero\"),\n    1..10 => println(\"small\"),\n    _ => println(\"other\")\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "write use match expression",
+    "output": "match value {\n    0 => println(\"zero\"),\n    1..10 => println(\"small\"),\n    _ => println(\"other\")\n}",
+    "category": "syntax"
+  },
+  {
+    "input": "what are the basic types",
+    "output": "int, float, bool, string, char\n[T] arrays, (A,B) tuples\nOption<T>, Result<T,E>",
+    "category": "syntax"
+  },
+  {
+    "input": "write what are the basic types",
+    "output": "int, float, bool, string, char\n[T] arrays, (A,B) tuples\nOption<T>, Result<T,E>",
+    "category": "syntax"
+  },
+  {
+    "input": "how do I train a classifier",
+    "output": "use quantumai::*;\nlet ds = DataPipeline::load(\"iris\").normalize().dataset();\nlet (train, test) = ds.train_test_split(0.2);\nlet mut model = Model::create(\"classifier\").epochs(150).learning_rate(0.01);\nmodel.train(&train.x, &train.y, 150, true);\nlet ev = model.evaluate(&test.x, &test.y);\nprintln!(\"Accuracy: {:.2}%\", ev[\"accuracy\"]*100.0);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me train a classifier",
+    "output": "use quantumai::*;\nlet ds = DataPipeline::load(\"iris\").normalize().dataset();\nlet (train, test) = ds.train_test_split(0.2);\nlet mut model = Model::create(\"classifier\").epochs(150).learning_rate(0.01);\nmodel.train(&train.x, &train.y, 150, true);\nlet ev = model.evaluate(&test.x, &test.y);\nprintln!(\"Accuracy: {:.2}%\", ev[\"accuracy\"]*100.0);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I build a neural network",
+    "output": "let mut net = Sequential::new();\nnet.dense(4, 64, \"relu\");\nnet.dropout(0.2);\nnet.dense(64, 32, \"relu\");\nnet.dense(32, 3, \"softmax\");\nnet.compile(\"adam\", \"cross_entropy\", 0.01);\nnet.fit(&x, &y, 150, 32, true);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me build a neural network",
+    "output": "let mut net = Sequential::new();\nnet.dense(4, 64, \"relu\");\nnet.dropout(0.2);\nnet.dense(64, 32, \"relu\");\nnet.dense(32, 3, \"softmax\");\nnet.compile(\"adam\", \"cross_entropy\", 0.01);\nnet.fit(&x, &y, 150, 32, true);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I detect anomalies",
+    "output": "let mut det = AnomalyDetector::new(n_features);\ndet.train_on_normal(&normal_data, 100);\nprintln!(\"{}\", det.describe(&new_sample));",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me detect anomalies",
+    "output": "let mut det = AnomalyDetector::new(n_features);\ndet.train_on_normal(&normal_data, 100);\nprintln!(\"{}\", det.describe(&new_sample));",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I run automl",
+    "output": "let result = AutoMLPipeline::run(\n    \"iris\", \"classifier\",\n    &[\"setosa\",\"versicolor\",\"virginica\"],\n    &[\"sepal_len\",\"sepal_wid\",\"petal_len\",\"petal_wid\"]\n);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me run automl",
+    "output": "let result = AutoMLPipeline::run(\n    \"iris\", \"classifier\",\n    &[\"setosa\",\"versicolor\",\"virginica\"],\n    &[\"sepal_len\",\"sepal_wid\",\"petal_len\",\"petal_wid\"]\n);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I benchmark a model",
+    "output": "let report = BenchmarkReport::run(\n    &mut model, &train.x, &train.y,\n    &test.x, &test.y, 3, &class_names\n);\nreport.print(&class_names);\nAIAssistant::analyze(&report);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me benchmark a model",
+    "output": "let report = BenchmarkReport::run(\n    &mut model, &train.x, &train.y,\n    &test.x, &test.y, 3, &class_names\n);\nreport.print(&class_names);\nAIAssistant::analyze(&report);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I save a model",
+    "output": "model.save(\"my_model.json\");\n// Load back:\nmodel.load_weights(\"my_model.json\");",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me save a model",
+    "output": "model.save(\"my_model.json\");\n// Load back:\nmodel.load_weights(\"my_model.json\");",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I use lstm",
+    "output": "let lstm = LSTM::new(input_size, 64, 2);\nlet (output, cell) = lstm.forward(&sequence_tensor);\n// output shape: [batch, seq_len, hidden_size]",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me use lstm",
+    "output": "let lstm = LSTM::new(input_size, 64, 2);\nlet (output, cell) = lstm.forward(&sequence_tensor);\n// output shape: [batch, seq_len, hidden_size]",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I use cross validation",
+    "output": "let cv = CrossValidation::run(&dataset, \"classifier\", 100, 5);\nprintln!(\"Accuracy: {:.2}% \u00b1 {:.2}%\", cv.mean*100.0, cv.std_dev*100.0);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me use cross validation",
+    "output": "let cv = CrossValidation::run(&dataset, \"classifier\", 100, 5);\nprintln!(\"Accuracy: {:.2}% \u00b1 {:.2}%\", cv.mean*100.0, cv.std_dev*100.0);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I tune hyperparameters",
+    "output": "let best = tune(&train_dataset, 10);\nprintln!(\"Best lr={} optimizer={}\", best.best_lr, best.best_optimizer);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me tune hyperparameters",
+    "output": "let best = tune(&train_dataset, 10);\nprintln!(\"Best lr={} optimizer={}\", best.best_lr, best.best_optimizer);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I load a dataset",
+    "output": "let ds = DataPipeline::load(\"iris\").clean().normalize().shuffle().dataset();\n// Built-in: iris, xor, moons, circles, blobs, spiral",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me load a dataset",
+    "output": "let ds = DataPipeline::load(\"iris\").clean().normalize().shuffle().dataset();\n// Built-in: iris, xor, moons, circles, blobs, spiral",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I use random forest",
+    "output": "use quantumai::ml::*;\nlet mut rf = RandomForest::new(100, 8);\nrf.fit(&x, &labels, n_classes);\nprintln!(\"{:.4}\", rf.accuracy(&x, &labels));",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me use random forest",
+    "output": "use quantumai::ml::*;\nlet mut rf = RandomForest::new(100, 8);\nrf.fit(&x, &labels, n_classes);\nprintln!(\"{:.4}\", rf.accuracy(&x, &labels));",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I use gradient boosting",
+    "output": "use quantumai::advanced::*;\nlet mut gb = GradientBoosting::new(50, 0.1, 4);\ngb.fit(&x, &y_binary);\nprintln!(\"{:.4}\", gb.accuracy(&x, &y_binary));",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me use gradient boosting",
+    "output": "use quantumai::advanced::*;\nlet mut gb = GradientBoosting::new(50, 0.1, 4);\ngb.fit(&x, &y_binary);\nprintln!(\"{:.4}\", gb.accuracy(&x, &y_binary));",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I explain a prediction",
+    "output": "PredictionExplainer::explain(&model, &sample, &feature_names, &class_names);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me explain a prediction",
+    "output": "PredictionExplainer::explain(&model, &sample, &feature_names, &class_names);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I get feature importance",
+    "output": "let imps = feature_importance(&model, &test.x, &test.y, &feat_names);\nfor (name, score) in &imps { println!(\"{}: {:.4}\", name, score); }",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me get feature importance",
+    "output": "let imps = feature_importance(&model, &test.x, &test.y, &feat_names);\nfor (name, score) in &imps { println!(\"{}: {:.4}\", name, score); }",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I use a gan",
+    "output": "let mut gan = GAN::new(16, 32, 64);\nlet fake = gan.generate(10);\nlet (d_loss, g_loss) = gan.train_step(&real_data, 32);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me use a gan",
+    "output": "let mut gan = GAN::new(16, 32, 64);\nlet fake = gan.generate(10);\nlet (d_loss, g_loss) = gan.train_step(&real_data, 32);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I train with lr scheduler",
+    "output": "let sched = LRScheduler::CosineAnnealingLR { t_max: 100, eta_min: 1e-5 };\nnet.fit_with_scheduler(&x, &y, 100, 32, sched, true);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me train with lr scheduler",
+    "output": "let sched = LRScheduler::CosineAnnealingLR { t_max: 100, eta_min: 1e-5 };\nnet.fit_with_scheduler(&x, &y, 100, 32, sched, true);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I compare models",
+    "output": "ModelComparison::run(\n    &mut [(\"Adam\",&mut m1),(\"AdamW\",&mut m2),(\"SGD\",&mut m3)],\n    &test.x, &test.y\n);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me compare models",
+    "output": "ModelComparison::run(\n    &mut [(\"Adam\",&mut m1),(\"AdamW\",&mut m2),(\"SGD\",&mut m3)],\n    &test.x, &test.y\n);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I check data quality",
+    "output": "let qr = DataQualityReport::analyze(&ds.x, &ds.y, &feat_names, &cls_names);\nqr.print(&cls_names);",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me check data quality",
+    "output": "let qr = DataQualityReport::analyze(&ds.x, &ds.y, &feat_names, &cls_names);\nqr.print(&cls_names);",
+    "category": "quantumai"
+  },
+  {
+    "input": "how do I deploy a model",
+    "output": "model.save(\"model.json\");\nmodel.serve(8080);  // starts REST API at http://localhost:8080/predict",
+    "category": "quantumai"
+  },
+  {
+    "input": "show me deploy a model",
+    "output": "model.save(\"model.json\");\nmodel.serve(8080);  // starts REST API at http://localhost:8080/predict",
+    "category": "quantumai"
+  },
+  {
+    "input": "what is sql injection",
+    "output": "SQL injection inserts malicious SQL into queries to steal/modify data.\nAttack: SELECT * FROM users WHERE id='' OR 1=1--\nPrevention: Always use parameterized queries, never concatenate user input.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain sql injection",
+    "output": "SQL injection inserts malicious SQL into queries to steal/modify data.\nAttack: SELECT * FROM users WHERE id='' OR 1=1--\nPrevention: Always use parameterized queries, never concatenate user input.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is xss",
+    "output": "XSS injects malicious scripts into web pages viewed by others.\nTypes: Stored (persisted), Reflected (in URL), DOM-based.\nPrevention: Sanitize all output, use Content-Security-Policy headers.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain xss",
+    "output": "XSS injects malicious scripts into web pages viewed by others.\nTypes: Stored (persisted), Reflected (in URL), DOM-based.\nPrevention: Sanitize all output, use Content-Security-Policy headers.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is csrf",
+    "output": "CSRF tricks authenticated users into unwanted actions.\nPrevention: CSRF tokens, SameSite cookies, verify Origin header.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain csrf",
+    "output": "CSRF tricks authenticated users into unwanted actions.\nPrevention: CSRF tokens, SameSite cookies, verify Origin header.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is a buffer overflow",
+    "output": "Writing beyond allocated memory \u2014 can execute arbitrary code.\nPrevention: Bounds checking, safe languages, stack canaries, ASLR.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain a buffer overflow",
+    "output": "Writing beyond allocated memory \u2014 can execute arbitrary code.\nPrevention: Bounds checking, safe languages, stack canaries, ASLR.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is sql injection prevention",
+    "output": "1. Use parameterized queries (prepared statements)\n2. Use ORM frameworks\n3. Validate/whitelist all input\n4. Limit database user permissions\nNEVER: query('SELECT * FROM users WHERE id=' + user_input)",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain sql injection prevention",
+    "output": "1. Use parameterized queries (prepared statements)\n2. Use ORM frameworks\n3. Validate/whitelist all input\n4. Limit database user permissions\nNEVER: query('SELECT * FROM users WHERE id=' + user_input)",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is owasp top 10",
+    "output": "Top 10 web security risks:\n1. Broken Access Control\n2. Cryptographic Failures\n3. Injection (SQL, XSS)\n4. Insecure Design\n5. Security Misconfiguration\n6. Vulnerable Components\n7. Auth Failures\n8. Data Integrity Failures\n9. Logging Failures\n10. SSRF",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain owasp top 10",
+    "output": "Top 10 web security risks:\n1. Broken Access Control\n2. Cryptographic Failures\n3. Injection (SQL, XSS)\n4. Insecure Design\n5. Security Misconfiguration\n6. Vulnerable Components\n7. Auth Failures\n8. Data Integrity Failures\n9. Logging Failures\n10. SSRF",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is penetration testing",
+    "output": "Authorised simulated attack to find vulnerabilities.\nPhases: Recon \u2192 Scanning \u2192 Exploitation \u2192 Post-exploitation \u2192 Reporting.\nAlways get written permission first! Unauthorised pen testing is illegal.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain penetration testing",
+    "output": "Authorised simulated attack to find vulnerabilities.\nPhases: Recon \u2192 Scanning \u2192 Exploitation \u2192 Post-exploitation \u2192 Reporting.\nAlways get written permission first! Unauthorised pen testing is illegal.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "how do I hash passwords",
+    "output": "Never store plain text! Use Argon2id (best) or bcrypt:\nbcrypt_hash = bcrypt(password, cost=12)\n// Verify:\nbcrypt_verify(input, stored_hash)\nNEVER use MD5 or SHA1 for passwords.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain hash passwords",
+    "output": "Never store plain text! Use Argon2id (best) or bcrypt:\nbcrypt_hash = bcrypt(password, cost=12)\n// Verify:\nbcrypt_verify(input, stored_hash)\nNEVER use MD5 or SHA1 for passwords.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is aes encryption",
+    "output": "AES is symmetric encryption (same key to encrypt/decrypt).\nRecommended: AES-256-GCM\nKey sizes: 128, 192, 256 bits\nUse for: encrypting data at rest and in transit.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain aes encryption",
+    "output": "AES is symmetric encryption (same key to encrypt/decrypt).\nRecommended: AES-256-GCM\nKey sizes: 128, 192, 256 bits\nUse for: encrypting data at rest and in transit.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is two factor authentication",
+    "output": "2FA: something you KNOW (password) + something you HAVE (phone/token).\nTypes: TOTP (Google Authenticator), SMS (weakest), Hardware key (YubiKey, strongest).\nAlways enable 2FA on important accounts!",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain two factor authentication",
+    "output": "2FA: something you KNOW (password) + something you HAVE (phone/token).\nTypes: TOTP (Google Authenticator), SMS (weakest), Hardware key (YubiKey, strongest).\nAlways enable 2FA on important accounts!",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is a man in the middle attack",
+    "output": "Attacker intercepts communication between two parties.\nPrevention: TLS/HTTPS, certificate pinning, VPN.\nDetection: Certificate warnings, unusual network behaviour.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain a man in the middle attack",
+    "output": "Attacker intercepts communication between two parties.\nPrevention: TLS/HTTPS, certificate pinning, VPN.\nDetection: Certificate warnings, unusual network behaviour.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is privilege escalation",
+    "output": "Gaining higher access than intended. Vertical: user\u2192admin. Horizontal: user A\u2192user B.\nPrevention: Least privilege principle, proper permission checks on every action.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain privilege escalation",
+    "output": "Gaining higher access than intended. Vertical: user\u2192admin. Horizontal: user A\u2192user B.\nPrevention: Least privilege principle, proper permission checks on every action.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is network scanning",
+    "output": "Discovering hosts, open ports, and services on a network.\nTools: nmap -sV target (service versions), nmap -p- (all ports)\nALWAYS get written permission before scanning!",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain network scanning",
+    "output": "Discovering hosts, open ports, and services on a network.\nTools: nmap -sV target (service versions), nmap -p- (all ports)\nALWAYS get written permission before scanning!",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is a zero day",
+    "output": "Vulnerability unknown to vendor \u2014 no patch exists yet.\nMitigation: Defence in depth, behaviour-based detection, rapid patching when available.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain a zero day",
+    "output": "Vulnerability unknown to vendor \u2014 no patch exists yet.\nMitigation: Defence in depth, behaviour-based detection, rapid patching when available.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "how do I secure an api",
+    "output": "API security checklist:\n1. Authentication (JWT, API keys, OAuth2)\n2. Rate limiting (prevent brute force)\n3. Input validation on ALL endpoints\n4. HTTPS only (no HTTP)\n5. Proper error handling (no stack traces to users)\n6. Log all requests\n7. CORS configuration",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain secure an api",
+    "output": "API security checklist:\n1. Authentication (JWT, API keys, OAuth2)\n2. Rate limiting (prevent brute force)\n3. Input validation on ALL endpoints\n4. HTTPS only (no HTTP)\n5. Proper error handling (no stack traces to users)\n6. Log all requests\n7. CORS configuration",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is ransomware",
+    "output": "Malware that encrypts files and demands payment.\nPrevention: Regular offline backups, patch management, email filtering, no macro execution.\nIf infected: Isolate system immediately, restore from clean backup.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain ransomware",
+    "output": "Malware that encrypts files and demands payment.\nPrevention: Regular offline backups, patch management, email filtering, no macro execution.\nIf infected: Isolate system immediately, restore from clean backup.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is phishing",
+    "output": "Fake emails/sites to steal credentials or install malware.\nSigns: Urgency, typos, suspicious URLs, unexpected attachments.\nPrevention: Email filtering, MFA, user training, URL verification.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain phishing",
+    "output": "Fake emails/sites to steal credentials or install malware.\nSigns: Urgency, typos, suspicious URLs, unexpected attachments.\nPrevention: Email filtering, MFA, user training, URL verification.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is defence in depth",
+    "output": "Multiple security layers \u2014 if one fails, others protect.\nLayers: Perimeter firewall \u2192 Network IDS \u2192 Host security \u2192 App security \u2192 Data encryption.\nNo single control is perfect \u2014 always layer!",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain defence in depth",
+    "output": "Multiple security layers \u2014 if one fails, others protect.\nLayers: Perimeter firewall \u2192 Network IDS \u2192 Host security \u2192 App security \u2192 Data encryption.\nNo single control is perfect \u2014 always layer!",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "how do I use quantum ai for intrusion detection",
+    "output": "use quantumai::*;\n// Train on normal traffic only\nlet normal = DataPipeline::load(\"normal_traffic.csv\").normalize().dataset();\nlet mut detector = AnomalyDetector::new(normal.n_features);\ndetector.train_on_normal(&normal.x, 200);\n// Score new traffic \u2014 >50 = potential intrusion\nlet score = detector.score(&new_traffic_sample);\nif score > 50.0 { println!(\"\u26a0\ufe0f Potential intrusion! Score: {:.0}\", score); }",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain use quantum ai for intrusion detection",
+    "output": "use quantumai::*;\n// Train on normal traffic only\nlet normal = DataPipeline::load(\"normal_traffic.csv\").normalize().dataset();\nlet mut detector = AnomalyDetector::new(normal.n_features);\ndetector.train_on_normal(&normal.x, 200);\n// Score new traffic \u2014 >50 = potential intrusion\nlet score = detector.score(&new_traffic_sample);\nif score > 50.0 { println!(\"\u26a0\ufe0f Potential intrusion! Score: {:.0}\", score); }",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "how do I build a malware classifier with quantum",
+    "output": "use quantumai::*;\n// Features: file entropy, import count, section count, API calls, strings\nlet ds = DataPipeline::load(\"malware_features.csv\").normalize().dataset();\nlet (train, test) = ds.train_test_split(0.2);\nlet auto = AutoMLPipeline::run(\n    \"malware_features\", \"classifier\",\n    &[\"benign\", \"malware\"],\n    &[\"entropy\",\"imports\",\"sections\",\"api_calls\"]\n);\nprintln!(\"Malware detector ready! Acc: {:.1}%\", auto.best_model.evaluate(&test.x,&test.y)[\"accuracy\"]*100.0);",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain build a malware classifier with quantum",
+    "output": "use quantumai::*;\n// Features: file entropy, import count, section count, API calls, strings\nlet ds = DataPipeline::load(\"malware_features.csv\").normalize().dataset();\nlet (train, test) = ds.train_test_split(0.2);\nlet auto = AutoMLPipeline::run(\n    \"malware_features\", \"classifier\",\n    &[\"benign\", \"malware\"],\n    &[\"entropy\",\"imports\",\"sections\",\"api_calls\"]\n);\nprintln!(\"Malware detector ready! Acc: {:.1}%\", auto.best_model.evaluate(&test.x,&test.y)[\"accuracy\"]*100.0);",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "how do I detect phishing with quantum",
+    "output": "use quantumai::*;\n// URL features: length, special chars, domain age, has_ssl, redirect_count\nlet ds = DataPipeline::load(\"phishing_urls.csv\").normalize().dataset();\nlet mut model = Model::create(\"classifier\").epochs(200).learning_rate(0.005);\nlet (train,test) = ds.train_test_split(0.2);\nmodel.train(&train.x, &train.y, 200, true);\nprintln!(\"Phishing detector acc: {:.1}%\", model.evaluate(&test.x,&test.y)[\"accuracy\"]*100.0);",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain detect phishing with quantum",
+    "output": "use quantumai::*;\n// URL features: length, special chars, domain age, has_ssl, redirect_count\nlet ds = DataPipeline::load(\"phishing_urls.csv\").normalize().dataset();\nlet mut model = Model::create(\"classifier\").epochs(200).learning_rate(0.005);\nlet (train,test) = ds.train_test_split(0.2);\nmodel.train(&train.x, &train.y, 200, true);\nprintln!(\"Phishing detector acc: {:.1}%\", model.evaluate(&test.x,&test.y)[\"accuracy\"]*100.0);",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is jwt",
+    "output": "JWT = header.payload.signature (base64 encoded, dot separated)\nPayload holds: user ID, roles, expiry.\nVerify: recalculate signature with secret and compare.\nSecurity: Use HS256+, short expiry (15min), validate ALL claims.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain jwt",
+    "output": "JWT = header.payload.signature (base64 encoded, dot separated)\nPayload holds: user ID, roles, expiry.\nVerify: recalculate signature with secret and compare.\nSecurity: Use HS256+, short expiry (15min), validate ALL claims.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is least privilege",
+    "output": "Users and processes get ONLY permissions needed for their job.\nImplementation: separate service accounts, minimal file permissions, RBAC.\nResult: Even if compromised, attacker has limited access.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain least privilege",
+    "output": "Users and processes get ONLY permissions needed for their job.\nImplementation: separate service accounts, minimal file permissions, RBAC.\nResult: Even if compromised, attacker has limited access.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is digital forensics",
+    "output": "Investigating digital devices to collect evidence.\nProcess: Identify \u2192 Preserve \u2192 Collect \u2192 Analyse \u2192 Report.\nKey rule: Never modify original evidence \u2014 always work on forensic copies.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain digital forensics",
+    "output": "Investigating digital devices to collect evidence.\nProcess: Identify \u2192 Preserve \u2192 Collect \u2192 Analyse \u2192 Report.\nKey rule: Never modify original evidence \u2014 always work on forensic copies.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "what is mitre att&ck",
+    "output": "Framework of adversary tactics and techniques based on real attacks.\n14 tactics from Initial Access \u2192 Exfiltration.\nUsed for: red team planning, detection engineering, incident response mapping.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "explain mitre att&ck",
+    "output": "Framework of adversary tactics and techniques based on real attacks.\n14 tactics from Initial Access \u2192 Exfiltration.\nUsed for: red team planning, detection engineering, incident response mapping.",
+    "category": "cybersecurity"
+  },
+  {
+    "input": "model accuracy stuck at 0.33",
+    "output": "Output collapse \u2014 all predictions same class.\nFixes:\n1. Remove BatchNorm layers (causes collapse on small datasets)\n2. Use lr=0.01\n3. Normalize data: DataPipeline::load(data).normalize()\n4. Train 150+ epochs\n5. Verify one-hot labels are correct",
+    "category": "debugging"
+  },
+  {
+    "input": "fix model accuracy stuck at 0.33",
+    "output": "Output collapse \u2014 all predictions same class.\nFixes:\n1. Remove BatchNorm layers (causes collapse on small datasets)\n2. Use lr=0.01\n3. Normalize data: DataPipeline::load(data).normalize()\n4. Train 150+ epochs\n5. Verify one-hot labels are correct",
+    "category": "debugging"
+  },
+  {
+    "input": "error model accuracy stuck at 0.33",
+    "output": "Output collapse \u2014 all predictions same class.\nFixes:\n1. Remove BatchNorm layers (causes collapse on small datasets)\n2. Use lr=0.01\n3. Normalize data: DataPipeline::load(data).normalize()\n4. Train 150+ epochs\n5. Verify one-hot labels are correct",
+    "category": "debugging"
+  },
+  {
+    "input": "model accuracy not improving",
+    "output": "Model stuck. Try:\n1. Increase lr to 0.01 (if using 0.001)\n2. Use optimizer='adam'\n3. Normalize data\n4. Remove BatchNorm for small datasets\n5. More epochs (200+)",
+    "category": "debugging"
+  },
+  {
+    "input": "fix model accuracy not improving",
+    "output": "Model stuck. Try:\n1. Increase lr to 0.01 (if using 0.001)\n2. Use optimizer='adam'\n3. Normalize data\n4. Remove BatchNorm for small datasets\n5. More epochs (200+)",
+    "category": "debugging"
+  },
+  {
+    "input": "error model accuracy not improving",
+    "output": "Model stuck. Try:\n1. Increase lr to 0.01 (if using 0.001)\n2. Use optimizer='adam'\n3. Normalize data\n4. Remove BatchNorm for small datasets\n5. More epochs (200+)",
+    "category": "debugging"
+  },
+  {
+    "input": "loss is nan",
+    "output": "Gradient explosion \u2192 NaN.\nFixes:\n1. Reduce lr 10x: try 0.0001\n2. Check for zero/inf in data\n3. Normalize features\n4. Use huber loss instead of mse",
+    "category": "debugging"
+  },
+  {
+    "input": "fix loss is nan",
+    "output": "Gradient explosion \u2192 NaN.\nFixes:\n1. Reduce lr 10x: try 0.0001\n2. Check for zero/inf in data\n3. Normalize features\n4. Use huber loss instead of mse",
+    "category": "debugging"
+  },
+  {
+    "input": "error loss is nan",
+    "output": "Gradient explosion \u2192 NaN.\nFixes:\n1. Reduce lr 10x: try 0.0001\n2. Check for zero/inf in data\n3. Normalize features\n4. Use huber loss instead of mse",
+    "category": "debugging"
+  },
+  {
+    "input": "model overfitting",
+    "output": "Train accuracy >> test accuracy.\nFixes:\n1. net.dropout(0.3) between layers\n2. More training data\n3. Smaller model (fewer neurons)\n4. optimizer='adamw' (adds weight decay)\n5. Early stopping",
+    "category": "debugging"
+  },
+  {
+    "input": "fix model overfitting",
+    "output": "Train accuracy >> test accuracy.\nFixes:\n1. net.dropout(0.3) between layers\n2. More training data\n3. Smaller model (fewer neurons)\n4. optimizer='adamw' (adds weight decay)\n5. Early stopping",
+    "category": "debugging"
+  },
+  {
+    "input": "error model overfitting",
+    "output": "Train accuracy >> test accuracy.\nFixes:\n1. net.dropout(0.3) between layers\n2. More training data\n3. Smaller model (fewer neurons)\n4. optimizer='adamw' (adds weight decay)\n5. Early stopping",
+    "category": "debugging"
+  },
+  {
+    "input": "undefined variable error",
+    "output": "Variable used before declaration.\nFix: add 'let variable_name = value' before using it.\nCheck spelling \u2014 Quantum is case-sensitive.",
+    "category": "debugging"
+  },
+  {
+    "input": "fix undefined variable error",
+    "output": "Variable used before declaration.\nFix: add 'let variable_name = value' before using it.\nCheck spelling \u2014 Quantum is case-sensitive.",
+    "category": "debugging"
+  },
+  {
+    "input": "error undefined variable error",
+    "output": "Variable used before declaration.\nFix: add 'let variable_name = value' before using it.\nCheck spelling \u2014 Quantum is case-sensitive.",
+    "category": "debugging"
+  },
+  {
+    "input": "type mismatch error",
+    "output": "Wrong type passed to function.\nCommon: int vs float (use 1.0 not 1), string vs &str.\nCheck function signature for expected types.",
+    "category": "debugging"
+  },
+  {
+    "input": "fix type mismatch error",
+    "output": "Wrong type passed to function.\nCommon: int vs float (use 1.0 not 1), string vs &str.\nCheck function signature for expected types.",
+    "category": "debugging"
+  },
+  {
+    "input": "error type mismatch error",
+    "output": "Wrong type passed to function.\nCommon: int vs float (use 1.0 not 1), string vs &str.\nCheck function signature for expected types.",
+    "category": "debugging"
+  },
+  {
+    "input": "predictions all same class",
+    "output": "Output collapsed. Remove BatchNorm. Use lr=0.01. Verify labels are multi-class one-hot.",
+    "category": "debugging"
+  },
+  {
+    "input": "fix predictions all same class",
+    "output": "Output collapsed. Remove BatchNorm. Use lr=0.01. Verify labels are multi-class one-hot.",
+    "category": "debugging"
+  },
+  {
+    "input": "error predictions all same class",
+    "output": "Output collapsed. Remove BatchNorm. Use lr=0.01. Verify labels are multi-class one-hot.",
+    "category": "debugging"
+  },
+  {
+    "input": "cannot borrow as mutable",
+    "output": "Need 'mut' keyword: let mut variable = value\nOr pass &mut reference to function.",
+    "category": "debugging"
+  },
+  {
+    "input": "fix cannot borrow as mutable",
+    "output": "Need 'mut' keyword: let mut variable = value\nOr pass &mut reference to function.",
+    "category": "debugging"
+  },
+  {
+    "input": "error cannot borrow as mutable",
+    "output": "Need 'mut' keyword: let mut variable = value\nOr pass &mut reference to function.",
+    "category": "debugging"
+  },
+  {
+    "input": "loss not decreasing",
+    "output": "Model not learning. Try:\n1. lr=0.01 with adam optimizer\n2. Normalize data\n3. Check labels are correct\n4. More training epochs",
+    "category": "debugging"
+  },
+  {
+    "input": "fix loss not decreasing",
+    "output": "Model not learning. Try:\n1. lr=0.01 with adam optimizer\n2. Normalize data\n3. Check labels are correct\n4. More training epochs",
+    "category": "debugging"
+  },
+  {
+    "input": "error loss not decreasing",
+    "output": "Model not learning. Try:\n1. lr=0.01 with adam optimizer\n2. Normalize data\n3. Check labels are correct\n4. More training epochs",
+    "category": "debugging"
+  },
+  {
+    "input": "slow training",
+    "output": "Speed up:\n1. Smaller model (fewer neurons)\n2. Larger batch size\n3. cargo build --release\n4. Fewer epochs with early stopping",
+    "category": "debugging"
+  },
+  {
+    "input": "fix slow training",
+    "output": "Speed up:\n1. Smaller model (fewer neurons)\n2. Larger batch size\n3. cargo build --release\n4. Fewer epochs with early stopping",
+    "category": "debugging"
+  },
+  {
+    "input": "error slow training",
+    "output": "Speed up:\n1. Smaller model (fewer neurons)\n2. Larger batch size\n3. cargo build --release\n4. Fewer epochs with early stopping",
+    "category": "debugging"
+  },
+  {
+    "input": "what is machine learning",
+    "output": "Teaching computers to learn from data \u2014 no explicit rules needed.\nYou show examples, the algorithm finds patterns.\nTypes: Supervised (labelled data), Unsupervised (no labels), Reinforcement (rewards).",
+    "category": "concept"
+  },
+  {
+    "input": "explain machine learning",
+    "output": "Teaching computers to learn from data \u2014 no explicit rules needed.\nYou show examples, the algorithm finds patterns.\nTypes: Supervised (labelled data), Unsupervised (no labels), Reinforcement (rewards).",
+    "category": "concept"
+  },
+  {
+    "input": "what is a neural network",
+    "output": "Layers of connected 'neurons' that transform data.\nEach layer learns different features: edges \u2192 shapes \u2192 objects.\nLearns via backpropagation: error flows backwards to adjust weights.",
+    "category": "concept"
+  },
+  {
+    "input": "explain a neural network",
+    "output": "Layers of connected 'neurons' that transform data.\nEach layer learns different features: edges \u2192 shapes \u2192 objects.\nLearns via backpropagation: error flows backwards to adjust weights.",
+    "category": "concept"
+  },
+  {
+    "input": "what is overfitting",
+    "output": "Model memorises training data but fails on new data.\nLike a student who memorises answers without understanding.\nSolution: Dropout, more data, simpler model, regularisation.",
+    "category": "concept"
+  },
+  {
+    "input": "explain overfitting",
+    "output": "Model memorises training data but fails on new data.\nLike a student who memorises answers without understanding.\nSolution: Dropout, more data, simpler model, regularisation.",
+    "category": "concept"
+  },
+  {
+    "input": "what is loss",
+    "output": "Measures how wrong the model is. 0 = perfect.\nCross-entropy for classification, MSE for regression.\nWant this going DOWN during training.",
+    "category": "concept"
+  },
+  {
+    "input": "explain loss",
+    "output": "Measures how wrong the model is. 0 = perfect.\nCross-entropy for classification, MSE for regression.\nWant this going DOWN during training.",
+    "category": "concept"
+  },
+  {
+    "input": "what is accuracy",
+    "output": "Percentage of correct predictions. 100% = perfect, 50% = random for 2 classes.\nFor imbalanced data: use F1 score instead.",
+    "category": "concept"
+  },
+  {
+    "input": "explain accuracy",
+    "output": "Percentage of correct predictions. 100% = perfect, 50% = random for 2 classes.\nFor imbalanced data: use F1 score instead.",
+    "category": "concept"
+  },
+  {
+    "input": "what is backpropagation",
+    "output": "How neural networks learn: errors flow backwards through layers.\nEach layer's weights adjust to reduce the error.\nMath: chain rule of calculus applied to the loss function.",
+    "category": "concept"
+  },
+  {
+    "input": "explain backpropagation",
+    "output": "How neural networks learn: errors flow backwards through layers.\nEach layer's weights adjust to reduce the error.\nMath: chain rule of calculus applied to the loss function.",
+    "category": "concept"
+  },
+  {
+    "input": "what is dropout",
+    "output": "Randomly disables neurons during training.\nForces network to learn redundant representations.\nResult: Less overfitting, more robust model.",
+    "category": "concept"
+  },
+  {
+    "input": "explain dropout",
+    "output": "Randomly disables neurons during training.\nForces network to learn redundant representations.\nResult: Less overfitting, more robust model.",
+    "category": "concept"
+  },
+  {
+    "input": "what is a learning rate",
+    "output": "How big the weight update steps are per iteration.\nToo high: unstable, loss jumps around. Too low: very slow.\nGood starting point: 0.001 for Adam, 0.01 for SGD.",
+    "category": "concept"
+  },
+  {
+    "input": "explain a learning rate",
+    "output": "How big the weight update steps are per iteration.\nToo high: unstable, loss jumps around. Too low: very slow.\nGood starting point: 0.001 for Adam, 0.01 for SGD.",
+    "category": "concept"
+  },
+  {
+    "input": "what is cross validation",
+    "output": "Testing model on different data splits multiple times for reliable estimate.\n5-fold: split data into 5 parts, train on 4, test on 1, repeat 5 times.\nResult: mean \u00b1 std accuracy.",
+    "category": "concept"
+  },
+  {
+    "input": "explain cross validation",
+    "output": "Testing model on different data splits multiple times for reliable estimate.\n5-fold: split data into 5 parts, train on 4, test on 1, repeat 5 times.\nResult: mean \u00b1 std accuracy.",
+    "category": "concept"
+  },
+  {
+    "input": "what is batch size",
+    "output": "How many samples processed before updating weights.\nSmall (16): noisy but generalises better. Large (128): stable but may overfit.\nDefault: 32 works well for most cases.",
+    "category": "concept"
+  },
+  {
+    "input": "explain batch size",
+    "output": "How many samples processed before updating weights.\nSmall (16): noisy but generalises better. Large (128): stable but may overfit.\nDefault: 32 works well for most cases.",
+    "category": "concept"
+  },
+  {
+    "input": "what is the difference between classification and regression",
+    "output": "Classification: predict a category (spam/not spam, flower species).\nRegression: predict a number (house price, temperature).\nClassification uses cross-entropy loss, regression uses MSE.",
+    "category": "concept"
+  },
+  {
+    "input": "explain the difference between classification and regression",
+    "output": "Classification: predict a category (spam/not spam, flower species).\nRegression: predict a number (house price, temperature).\nClassification uses cross-entropy loss, regression uses MSE.",
+    "category": "concept"
+  },
+  {
+    "input": "what is transfer learning",
+    "output": "Using a pre-trained model and adapting it for your task.\nFaster than training from scratch \u2014 model already knows basic features.\nIn Quantum: Model::load('efficientnet', true)",
+    "category": "concept"
+  },
+  {
+    "input": "explain transfer learning",
+    "output": "Using a pre-trained model and adapting it for your task.\nFaster than training from scratch \u2014 model already knows basic features.\nIn Quantum: Model::load('efficientnet', true)",
+    "category": "concept"
+  },
+  {
+    "input": "generate fibonacci function",
+    "output": "fn fibonacci(n: int) -> int {\n    if n <= 1 { return n }\n    return fibonacci(n - 1) + fibonacci(n - 2)\n}\n\nfn main() {\n    for i in 0..10 { println(fibonacci(i)) }\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "write a fibonacci function",
+    "output": "fn fibonacci(n: int) -> int {\n    if n <= 1 { return n }\n    return fibonacci(n - 1) + fibonacci(n - 2)\n}\n\nfn main() {\n    for i in 0..10 { println(fibonacci(i)) }\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "create a fibonacci function",
+    "output": "fn fibonacci(n: int) -> int {\n    if n <= 1 { return n }\n    return fibonacci(n - 1) + fibonacci(n - 2)\n}\n\nfn main() {\n    for i in 0..10 { println(fibonacci(i)) }\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "generate factorial function",
+    "output": "fn factorial(n: int) -> int {\n    if n <= 1 { return 1 }\n    return n * factorial(n - 1)\n}\n\nfn main() {\n    println(factorial(5))  // 120\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "write a factorial function",
+    "output": "fn factorial(n: int) -> int {\n    if n <= 1 { return 1 }\n    return n * factorial(n - 1)\n}\n\nfn main() {\n    println(factorial(5))  // 120\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "create a factorial function",
+    "output": "fn factorial(n: int) -> int {\n    if n <= 1 { return 1 }\n    return n * factorial(n - 1)\n}\n\nfn main() {\n    println(factorial(5))  // 120\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "generate bubble sort function",
+    "output": "fn bubble_sort(mut arr: [int]) -> [int] {\n    let n = arr.len()\n    for i in 0..n {\n        for j in 0..(n-i-1) {\n            if arr[j] > arr[j+1] {\n                let tmp = arr[j]\n                arr[j] = arr[j+1]\n                arr[j+1] = tmp\n            }\n        }\n    }\n    return arr\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "write a bubble sort function",
+    "output": "fn bubble_sort(mut arr: [int]) -> [int] {\n    let n = arr.len()\n    for i in 0..n {\n        for j in 0..(n-i-1) {\n            if arr[j] > arr[j+1] {\n                let tmp = arr[j]\n                arr[j] = arr[j+1]\n                arr[j+1] = tmp\n            }\n        }\n    }\n    return arr\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "create a bubble sort function",
+    "output": "fn bubble_sort(mut arr: [int]) -> [int] {\n    let n = arr.len()\n    for i in 0..n {\n        for j in 0..(n-i-1) {\n            if arr[j] > arr[j+1] {\n                let tmp = arr[j]\n                arr[j] = arr[j+1]\n                arr[j+1] = tmp\n            }\n        }\n    }\n    return arr\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "generate is prime function",
+    "output": "fn is_prime(n: int) -> bool {\n    if n < 2 { return false }\n    let mut i = 2\n    while i * i <= n {\n        if n % i == 0 { return false }\n        i = i + 1\n    }\n    return true\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "write a is prime function",
+    "output": "fn is_prime(n: int) -> bool {\n    if n < 2 { return false }\n    let mut i = 2\n    while i * i <= n {\n        if n % i == 0 { return false }\n        i = i + 1\n    }\n    return true\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "create a is prime function",
+    "output": "fn is_prime(n: int) -> bool {\n    if n < 2 { return false }\n    let mut i = 2\n    while i * i <= n {\n        if n % i == 0 { return false }\n        i = i + 1\n    }\n    return true\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "generate hello world",
+    "output": "fn main() {\n    println(\"Hello, Quantum World!\")\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "write a hello world",
+    "output": "fn main() {\n    println(\"Hello, Quantum World!\")\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "create a hello world",
+    "output": "fn main() {\n    println(\"Hello, Quantum World!\")\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "generate full classifier project",
+    "output": "use quantumai::*;\n\nfn main() {\n    // 1. Load and analyse data\n    let ds = DataPipeline::load(\"iris\").normalize().dataset();\n    DataQualityReport::analyze(&ds.x, &ds.y, &[\"f1\",\"f2\",\"f3\",\"f4\"], &[\"a\",\"b\",\"c\"]).print_simple();\n\n    // 2. Split\n    let (train, test) = ds.train_test_split(0.2);\n\n    // 3. Hyperparameter search\n    let best = tune(&train, 8);\n\n    // 4. Train\n    let mut model = Model::create(\"classifier\");\n    model.lr = best.best_lr;\n    model.train(&train.x, &train.y, 150, true);\n\n    // 5. Benchmark\n    let report = BenchmarkReport::run(&mut model, &train.x, &train.y, &test.x, &test.y, 3, &[\"a\",\"b\",\"c\"]);\n    report.print(&[\"a\",\"b\",\"c\"]);\n    AIAssistant::analyze(&report);\n    ModelCard::from_benchmark(&model, &report).print();\n    model.save(\"model.json\");\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "write a full classifier project",
+    "output": "use quantumai::*;\n\nfn main() {\n    // 1. Load and analyse data\n    let ds = DataPipeline::load(\"iris\").normalize().dataset();\n    DataQualityReport::analyze(&ds.x, &ds.y, &[\"f1\",\"f2\",\"f3\",\"f4\"], &[\"a\",\"b\",\"c\"]).print_simple();\n\n    // 2. Split\n    let (train, test) = ds.train_test_split(0.2);\n\n    // 3. Hyperparameter search\n    let best = tune(&train, 8);\n\n    // 4. Train\n    let mut model = Model::create(\"classifier\");\n    model.lr = best.best_lr;\n    model.train(&train.x, &train.y, 150, true);\n\n    // 5. Benchmark\n    let report = BenchmarkReport::run(&mut model, &train.x, &train.y, &test.x, &test.y, 3, &[\"a\",\"b\",\"c\"]);\n    report.print(&[\"a\",\"b\",\"c\"]);\n    AIAssistant::analyze(&report);\n    ModelCard::from_benchmark(&model, &report).print();\n    model.save(\"model.json\");\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "create a full classifier project",
+    "output": "use quantumai::*;\n\nfn main() {\n    // 1. Load and analyse data\n    let ds = DataPipeline::load(\"iris\").normalize().dataset();\n    DataQualityReport::analyze(&ds.x, &ds.y, &[\"f1\",\"f2\",\"f3\",\"f4\"], &[\"a\",\"b\",\"c\"]).print_simple();\n\n    // 2. Split\n    let (train, test) = ds.train_test_split(0.2);\n\n    // 3. Hyperparameter search\n    let best = tune(&train, 8);\n\n    // 4. Train\n    let mut model = Model::create(\"classifier\");\n    model.lr = best.best_lr;\n    model.train(&train.x, &train.y, 150, true);\n\n    // 5. Benchmark\n    let report = BenchmarkReport::run(&mut model, &train.x, &train.y, &test.x, &test.y, 3, &[\"a\",\"b\",\"c\"]);\n    report.print(&[\"a\",\"b\",\"c\"]);\n    AIAssistant::analyze(&report);\n    ModelCard::from_benchmark(&model, &report).print();\n    model.save(\"model.json\");\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "generate fraud detection system",
+    "output": "use quantumai::*;\n\nfn main() {\n    println!(\"=== Fraud Detection System ===\");\n    // Load normal transactions\n    let normal = DataPipeline::load(\"transactions.csv\").normalize().dataset();\n    \n    // Train anomaly detector\n    let mut detector = AnomalyDetector::new(normal.n_features);\n    detector.train_on_normal(&normal.x, 150);\n    \n    // Score new transactions\n    println!(\"Scoring transactions...\");\n    let n = normal.n_samples.min(5);\n    for i in 0..n {\n        let sample = Tensor::new(normal.x.data[i*normal.n_features..(i+1)*normal.n_features].to_vec(), vec![1, normal.n_features]);\n        println!(\"  Transaction {}: {}\", i+1, detector.describe(&sample));\n    }\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "write a fraud detection system",
+    "output": "use quantumai::*;\n\nfn main() {\n    println!(\"=== Fraud Detection System ===\");\n    // Load normal transactions\n    let normal = DataPipeline::load(\"transactions.csv\").normalize().dataset();\n    \n    // Train anomaly detector\n    let mut detector = AnomalyDetector::new(normal.n_features);\n    detector.train_on_normal(&normal.x, 150);\n    \n    // Score new transactions\n    println!(\"Scoring transactions...\");\n    let n = normal.n_samples.min(5);\n    for i in 0..n {\n        let sample = Tensor::new(normal.x.data[i*normal.n_features..(i+1)*normal.n_features].to_vec(), vec![1, normal.n_features]);\n        println!(\"  Transaction {}: {}\", i+1, detector.describe(&sample));\n    }\n}",
+    "category": "codegen"
+  },
+  {
+    "input": "create a fraud detection system",
+    "output": "use quantumai::*;\n\nfn main() {\n    println!(\"=== Fraud Detection System ===\");\n    // Load normal transactions\n    let normal = DataPipeline::load(\"transactions.csv\").normalize().dataset();\n    \n    // Train anomaly detector\n    let mut detector = AnomalyDetector::new(normal.n_features);\n    detector.train_on_normal(&normal.x, 150);\n    \n    // Score new transactions\n    println!(\"Scoring transactions...\");\n    let n = normal.n_samples.min(5);\n    for i in 0..n {\n        let sample = Tensor::new(normal.x.data[i*normal.n_features..(i+1)*normal.n_features].to_vec(), vec![1, normal.n_features]);\n        println!(\"  Transaction {}: {}\", i+1, detector.describe(&sample));\n    }\n}",
+    "category": "codegen"
+  }
+]

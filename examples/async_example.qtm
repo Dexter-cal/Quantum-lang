@@ -1,0 +1,121 @@
+// Async/Await Example - Concurrent Programming in Quantum
+// Note: Full async runtime implementation pending
+
+import std::async
+
+// Async function that fetches data
+async fn fetch_data(url: String) -> String {
+    print(f"Fetching from {url}...")
+
+    // Simulate async operation
+    await sleep(1000)  // Wait 1 second
+
+    return f"Data from {url}"
+}
+
+// Async function that processes multiple requests
+async fn fetch_multiple(urls: [String]) -> [String] {
+    let results = []
+
+    // Spawn multiple concurrent tasks
+    let tasks = []
+    for url in urls {
+        let task = spawn(fetch_data(url))
+        tasks.push(task)
+    }
+
+    // Await all tasks
+    for task in tasks {
+        let result = await task
+        results.push(result)
+    }
+
+    return results
+}
+
+// Example: Concurrent HTTP requests
+async fn http_example() {
+    let urls = [
+        "https://api.example.com/users",
+        "https://api.example.com/posts",
+        "https://api.example.com/comments"
+    ]
+
+    print("Starting concurrent requests...")
+    let results = await fetch_multiple(urls)
+
+    print("All requests completed!")
+    for result in results {
+        print(result)
+    }
+}
+
+// Example: Timeout and cancellation
+async fn timeout_example() {
+    let result = await timeout(
+        fetch_data("https://slow-api.com"),
+        5000  // 5 second timeout
+    )
+
+    match result {
+        Ok(data) => print(f"Got data: {data}"),
+        Err(Timeout) => print("Request timed out!"),
+        Err(e) => print(f"Error: {e}")
+    }
+}
+
+// Example: Select (race between multiple futures)
+async fn select_example() {
+    let result = await select([
+        fetch_data("https://api1.com"),
+        fetch_data("https://api2.com"),
+        fetch_data("https://api3.com")
+    ])
+
+    print(f"First to complete: {result}")
+}
+
+// Example: Async streaming
+async fn stream_example() {
+    let stream = fetch_stream("https://api.example.com/events")
+
+    for await event in stream {
+        print(f"Received: {event}")
+
+        if event == "END" {
+            break
+        }
+    }
+}
+
+// Example: Channels for communication
+async fn channel_example() {
+    let (sender, receiver) = channel<String>()
+
+    // Producer
+    spawn(async {
+        for i in 0..10 {
+            sender.send(f"Message {i}")
+            await sleep(100)
+        }
+        sender.close()
+    })
+
+    // Consumer
+    while let Some(msg) = await receiver.recv() {
+        print(f"Received: {msg}")
+    }
+}
+
+fn main() {
+    // Run async code
+    async_runtime::block_on(async {
+        await http_example()
+        await timeout_example()
+        await select_example()
+        await stream_example()
+        await channel_example()
+    })
+
+    print("All async operations completed!")
+}

@@ -1,0 +1,14 @@
+import strings
+
+fn main() {
+    println(str_to_upper_char(97))
+    println(str_parse_int("42"))
+    let r = str_repeat("ab", 3)
+    println(r)
+    println(str_is_digit(53))
+    println(str_is_digit(97))
+    let padded = str_pad_left("7", 3, "0")
+    println(padded)
+    let padded2 = str_pad_right("ab", 5, "*")
+    println(padded2)
+}

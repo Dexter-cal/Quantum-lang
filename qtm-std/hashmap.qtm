@@ -1,0 +1,156 @@
+// qtm-std/hashmap.qtm -- hash map: int keys -> int values
+// Open addressing, linear probing, load factor 0.75.
+// ALL mutation functions return the updated map -- you must reassign:
+//   m = map_insert(m, key, val)   not   map_insert(m, key, val)
+
+struct HashMapInt {
+    keys_ptr: i64,
+    vals_ptr: i64,
+    cap: int,
+    len: int,
+}
+
+// Sentinel for empty slots: max int32.  Zero and negatives are valid keys.
+fn map_sentinel() -> int {
+    return 2147483647
+}
+
+fn map_hash(key: int, cap: int) -> int {
+    let mut h = key * 2654435761
+    if h < 0 { h = 0 - h }
+    if h < 0 { h = 0 }
+    return h % cap
+}
+
+fn map_init_slots(keys_ptr: i64, cap: int) {
+    let s = map_sentinel()
+    let mut i = 0
+    while i < cap {
+        q_write_i64(keys_ptr, i, s)
+        i += 1
+    }
+}
+
+fn map_new() -> HashMapInt {
+    let cap = 16
+    let keys_ptr = q_alloc(cap * 8)
+    let vals_ptr = q_alloc(cap * 8)
+    map_init_slots(keys_ptr, cap)
+    return HashMapInt { keys_ptr: keys_ptr, vals_ptr: vals_ptr, cap: cap, len: 0 }
+}
+
+// Returns the slot index where key lives, or first empty slot.
+fn map_find_slot(keys_ptr: i64, cap: int, key: int) -> int {
+    let s = map_sentinel()
+    let mut slot = map_hash(key, cap)
+    let mut i = 0
+    while i < cap {
+        let k = q_read_i64(keys_ptr, slot)
+        if k == key || k == s {
+            return slot
+        }
+        slot = (slot + 1) % cap
+        i += 1
+    }
+    return slot
+}
+
+fn map_rehash(ok: i64, ov: i64, old_cap: int, nk: i64, nv: i64, new_cap: int) {
+    let s = map_sentinel()
+    let mut i = 0
+    while i < old_cap {
+        let k = q_read_i64(ok, i)
+        if k != s {
+            let v = q_read_i64(ov, i)
+            let slot = map_find_slot(nk, new_cap, k)
+            q_write_i64(nk, slot, k)
+            q_write_i64(nv, slot, v)
+        }
+        i += 1
+    }
+}
+
+fn map_grow(m: HashMapInt) -> HashMapInt {
+    let new_cap = m.cap * 2
+    let nk = q_alloc(new_cap * 8)
+    let nv = q_alloc(new_cap * 8)
+    map_init_slots(nk, new_cap)
+    map_rehash(m.keys_ptr, m.vals_ptr, m.cap, nk, nv, new_cap)
+    q_free(m.keys_ptr)
+    q_free(m.vals_ptr)
+    return HashMapInt { keys_ptr: nk, vals_ptr: nv, cap: new_cap, len: m.len }
+}
+
+fn map_insert(m: HashMapInt, key: int, value: int) -> HashMapInt {
+    let threshold = (m.cap * 3) / 4
+    let mut mm = m
+    if mm.len >= threshold {
+        mm = map_grow(mm)
+    }
+    let s = map_sentinel()
+    let slot = map_find_slot(mm.keys_ptr, mm.cap, key)
+    let existing = q_read_i64(mm.keys_ptr, slot)
+    if existing == s {
+        q_write_i64(mm.keys_ptr, slot, key)
+        q_write_i64(mm.vals_ptr, slot, value)
+        return HashMapInt { keys_ptr: mm.keys_ptr, vals_ptr: mm.vals_ptr, cap: mm.cap, len: mm.len + 1 }
+    }
+    q_write_i64(mm.vals_ptr, slot, value)
+    return mm
+}
+
+fn map_get(m: HashMapInt, key: int) -> Result<int, string> {
+    let slot = map_find_slot(m.keys_ptr, m.cap, key)
+    let k = q_read_i64(m.keys_ptr, slot)
+    if k == key {
+        return Ok(q_read_i64(m.vals_ptr, slot))
+    }
+    return Err("Key not found")
+}
+
+fn map_contains(m: HashMapInt, key: int) -> bool {
+    let r = map_get(m, key)
+    return r.is_ok
+}
+
+fn map_get_or(m: HashMapInt, key: int, default: int) -> int {
+    let r = map_get(m, key)
+    if r.is_ok { return r.value }
+    return default
+}
+
+fn map_len(m: HashMapInt) -> int { return m.len }
+fn map_is_empty(m: HashMapInt) -> bool { return m.len == 0 }
+
+fn map_remove(m: HashMapInt, key: int) -> HashMapInt {
+    let s = map_sentinel()
+    let slot = map_find_slot(m.keys_ptr, m.cap, key)
+    let k = q_read_i64(m.keys_ptr, slot)
+    if k != key { return m }
+    q_write_i64(m.keys_ptr, slot, s)
+    let mut prev = slot
+    let mut cur = (slot + 1) % m.cap
+    let mut i = 0
+    while i < m.cap {
+        let cur_key = q_read_i64(m.keys_ptr, cur)
+        if cur_key == s {
+            return HashMapInt { keys_ptr: m.keys_ptr, vals_ptr: m.vals_ptr, cap: m.cap, len: m.len - 1 }
+        }
+        let ideal = map_hash(cur_key, m.cap)
+        let should_move = (cur > prev && (ideal <= prev || ideal > cur)) || (cur < prev && ideal <= prev && ideal > cur)
+        if should_move {
+            q_write_i64(m.keys_ptr, prev, cur_key)
+            q_write_i64(m.vals_ptr, prev, q_read_i64(m.vals_ptr, cur))
+            q_write_i64(m.keys_ptr, cur, s)
+            prev = cur
+        }
+        cur = (cur + 1) % m.cap
+        i += 1
+    }
+    return HashMapInt { keys_ptr: m.keys_ptr, vals_ptr: m.vals_ptr, cap: m.cap, len: m.len - 1 }
+}
+
+fn map_free(m: HashMapInt) {
+    q_free(m.keys_ptr)
+    q_free(m.vals_ptr)
+}

@@ -1,0 +1,15 @@
+import collections
+
+fn main() {
+    println(range_sum(1, 10))
+    println(range_product(1, 5))
+    println(range_count_even(1, 10))
+    println(count_occurrences_of_digit(122333, 3))
+    println(max3(4, 9, 2))
+    println(min3(4, 9, 2))
+    println(is_prime(17))
+    println(is_prime(18))
+    println(gcd(48, 18))
+    println(lcm(4, 6))
+    println(fibonacci(10))
+}

@@ -1,0 +1,488 @@
+// Quantum Macro System - Powerful compile-time code generation
+
+// ============================================
+// DECLARATIVE MACROS (macro_rules!)
+// ============================================
+
+// Simple macro
+macro_rules! say_hello {
+    () => {
+        print("Hello from macro!")
+    };
+}
+
+// Macro with arguments
+macro_rules! create_function {
+    ($func_name:ident) => {
+        fn $func_name() {
+            print(stringify!($func_name))
+        }
+    };
+}
+
+// Macro with multiple patterns
+macro_rules! vec {
+    () => {
+        Vec::new()
+    };
+    ($elem:expr; $n:expr) => {
+        Vec::from_elem($elem, $n)
+    };
+    ($($x:expr),+ $(,)?) => {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($x);
+            )+
+            temp_vec
+        }
+    };
+}
+
+// Conditional compilation macro
+macro_rules! cfg_if {
+    ($(
+        if #[cfg($($meta:meta),*)] {
+            $($it:item)*
+        }
+    ) else * else {
+        $($it2:item)*
+    }) => {
+        $(
+            $(#[cfg($($meta),*)] $it)*
+        )*
+        $(#[cfg(not(any($($meta),*)))] $it2)*
+    };
+}
+
+// Format string macro
+macro_rules! format {
+    ($fmt:expr) => {
+        String::from($fmt)
+    };
+    ($fmt:expr, $($args:expr),*) => {
+        String::format($fmt, $($args),*)
+    };
+}
+
+// Assert macro with custom message
+macro_rules! assert {
+    ($cond:expr) => {
+        if !$cond {
+            panic!("assertion failed: {}", stringify!($cond))
+        }
+    };
+    ($cond:expr, $msg:expr) => {
+        if !$cond {
+            panic!("assertion failed: {}: {}", stringify!($cond), $msg)
+        }
+    };
+}
+
+// Hashmap creation macro
+macro_rules! hashmap {
+    ($($key:expr => $val:expr),* $(,)?) => {
+        {
+            let mut map = HashMap::new();
+            $(
+                map.insert($key, $val);
+            )*
+            map
+        }
+    };
+}
+
+// Match expression builder
+macro_rules! matches {
+    ($expr:expr, $pat:pat) => {
+        match $expr {
+            $pat => true,
+            _ => false,
+        }
+    };
+}
+
+// Logging macro with levels
+macro_rules! log {
+    (error: $($arg:tt)*) => {
+        eprintln!("[ERROR] {}", format!($($arg)*))
+    };
+    (warn: $($arg:tt)*) => {
+        eprintln!("[WARN] {}", format!($($arg)*))
+    };
+    (info: $($arg:tt)*) => {
+        println!("[INFO] {}", format!($($arg)*))
+    };
+    (debug: $($arg:tt)*) => {
+        #[cfg(debug_assertions)]
+        println!("[DEBUG] {}", format!($($arg)*))
+    };
+}
+
+// ============================================
+// PROCEDURAL MACROS (Advanced)
+// ============================================
+
+// Derive macro example
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+struct User {
+    id: int,
+    name: String,
+    email: String,
+}
+
+// Attribute macro example
+#[route(GET, "/users/:id")]
+async fn get_user(id: int) -> Response {
+    let user = db.find_user(id)
+    json_response(user)
+}
+
+// Function-like macro
+quantum_sql! {
+    SELECT * FROM users
+    WHERE age > 18
+    ORDER BY name
+}
+
+// Custom derive for builders
+#[derive(Builder)]
+struct Config {
+    host: String,
+    port: int,
+    #[builder(default = 30)]
+    timeout: int,
+}
+
+// Usage:
+let config = Config::builder()
+    .host("localhost")
+    .port(8080)
+    .build();
+
+// ============================================
+// MACRO PATTERNS
+// ============================================
+
+// Repeat pattern
+macro_rules! repeat {
+    ($($x:expr),*) => {
+        {
+            $(
+                print($x);
+            )*
+        }
+    };
+}
+
+// Optional pattern
+macro_rules! optional {
+    ($x:expr) => { Some($x) };
+    () => { None };
+}
+
+// Nested pattern
+macro_rules! nested {
+    ($([$($x:expr),*]),*) => {
+        [
+            $(
+                [$($x),*]
+            ),*
+        ]
+    };
+}
+
+// ============================================
+// PRACTICAL MACRO EXAMPLES
+// ============================================
+
+// Test macro
+macro_rules! test {
+    ($name:ident, $body:expr) => {
+        #[test]
+        fn $name() {
+            $body
+        }
+    };
+}
+
+test!(test_addition, {
+    assert_eq!(2 + 2, 4);
+});
+
+// Benchmark macro
+macro_rules! bench {
+    ($name:ident, $body:expr) => {
+        #[bench]
+        fn $name(b: &mut Bencher) {
+            b.iter(|| {
+                $body
+            });
+        }
+    };
+}
+
+bench!(bench_vec_creation, {
+    let v = vec![1, 2, 3, 4, 5];
+});
+
+// Lazy static initialization
+macro_rules! lazy_static {
+    ($name:ident: $ty:ty = $init:expr) => {
+        static $name: Lazy<$ty> = Lazy::new(|| $init);
+    };
+}
+
+lazy_static!(GLOBAL_CONFIG: Config = Config::load());
+
+// Once function (runs only once)
+macro_rules! once {
+    ($body:expr) => {
+        {
+            static ONCE: Once = Once::new();
+            ONCE.call_once(|| $body);
+        }
+    };
+}
+
+// Try macro for error handling
+macro_rules! try_opt {
+    ($expr:expr) => {
+        match $expr {
+            Some(val) => val,
+            None => return None,
+        }
+    };
+}
+
+// ============================================
+// DOMAIN-SPECIFIC MACROS
+// ============================================
+
+// HTML DSL
+macro_rules! html {
+    (<$tag:ident> $($child:tt)* </$tag:ident>) => {
+        Html::new(stringify!($tag))
+            .children(html!($($child)*))
+    };
+    ($text:expr) => {
+        Html::text($text)
+    };
+}
+
+let page = html! {
+    <div>
+        <h1>"Welcome"</h1>
+        <p>"Hello, World!"</p>
+    </div>
+};
+
+// SQL query builder
+macro_rules! sql {
+    (SELECT $($col:ident),+ FROM $table:ident WHERE $cond:expr) => {
+        Query::new()
+            .select(&[$(stringify!($col)),+])
+            .from(stringify!($table))
+            .where_clause($cond)
+    };
+}
+
+let query = sql! {
+    SELECT id, name, email
+    FROM users
+    WHERE age > 18
+};
+
+// State machine macro
+macro_rules! state_machine {
+    (
+        $name:ident {
+            $($state:ident => {
+                $($event:ident => $next:ident),*
+            }),*
+        }
+    ) => {
+        enum $name {
+            $($state),*
+        }
+
+        impl $name {
+            fn transition(&mut self, event: Event) {
+                *self = match (self, event) {
+                    $(
+                        $(($name::$state, Event::$event) => $name::$next,)*
+                    )*
+                    _ => panic!("Invalid transition"),
+                };
+            }
+        }
+    };
+}
+
+state_machine! {
+    Door {
+        Closed => {
+            Open => Opened,
+            Lock => Locked
+        },
+        Opened => {
+            Close => Closed
+        },
+        Locked => {
+            Unlock => Closed
+        }
+    }
+}
+
+// ============================================
+// COMPILE-TIME CHECKS
+// ============================================
+
+// Compile-time string validation
+macro_rules! email {
+    ($e:expr) => {
+        {
+            const_assert!(is_valid_email($e));
+            Email::new($e)
+        }
+    };
+}
+
+// Compile-time arithmetic
+macro_rules! const_add {
+    ($a:expr, $b:expr) => {
+        {
+            const RESULT: int = $a + $b;
+            RESULT
+        }
+    };
+}
+
+// Type-level programming
+macro_rules! type_list {
+    () => { Nil };
+    ($head:ty $(, $tail:ty)*) => {
+        Cons<$head, type_list!($($tail),*)>
+    };
+}
+
+// ============================================
+// MACRO HYGIENE AND DEBUGGING
+// ============================================
+
+// Show expanded macro
+#[macro_debug]
+macro_rules! debug_macro {
+    ($x:expr) => {
+        print(stringify!($x))
+    };
+}
+
+// Macro with better error messages
+macro_rules! safe_div {
+    ($a:expr, $b:expr) => {
+        {
+            let divisor = $b;
+            if divisor == 0 {
+                compile_error!("Division by zero is not allowed");
+            }
+            $a / divisor
+        }
+    };
+}
+
+// ============================================
+// MAIN DEMONSTRATION
+// ============================================
+
+fn main() {
+    // Use macros
+    say_hello!();
+
+    create_function!(my_function);
+    my_function();
+
+    let v = vec![1, 2, 3, 4, 5];
+    print(v);
+
+    let map = hashmap! {
+        "name" => "Alice",
+        "age" => "30",
+    };
+
+    log!(info: "Server started on port {}", 8080);
+    log!(debug: "Debug information");
+
+    repeat!("Hello", "World", "!");
+
+    // Conditional compilation
+    cfg_if! {
+        if #[cfg(target_os = "linux")] {
+            const OS: &str = "Linux";
+        } else if #[cfg(target_os = "windows")] {
+            const OS: &str = "Windows";
+        } else {
+            const OS: &str = "Other";
+        }
+    }
+
+    print(f"Running on: {OS}");
+}
+
+// ============================================
+// MACRO BEST PRACTICES
+// ============================================
+
+// 1. Use meaningful names
+// Good: vec!, hashmap!, format!
+// Bad: m!, x!, do_it!
+
+// 2. Document your macros
+/// Creates a vector with given elements
+///
+/// # Examples
+/// ```
+/// let v = vec![1, 2, 3];
+/// ```
+macro_rules! vec { ... }
+
+// 3. Handle edge cases
+macro_rules! safe_unwrap {
+    ($opt:expr) => {
+        match $opt {
+            Some(val) => val,
+            None => panic!("Attempted to unwrap None"),
+        }
+    };
+    ($opt:expr, $msg:expr) => {
+        match $opt {
+            Some(val) => val,
+            None => panic!($msg),
+        }
+    };
+}
+
+// 4. Use hygiene properly
+macro_rules! hygienic {
+    () => {
+        {
+            let _private = 42; // Won't conflict with outer scope
+            _private
+        }
+    };
+}
+
+// 5. Provide good error messages
+macro_rules! validate_age {
+    ($age:expr) => {
+        {
+            if $age < 0 {
+                compile_error!("Age cannot be negative");
+            }
+            if $age > 150 {
+                compile_error!("Age seems unrealistic");
+            }
+            $age
+        }
+    };
+}

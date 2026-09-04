@@ -1,0 +1,340 @@
+// Network Programming Example - HTTP Client/Server in Quantum
+// Note: Full networking library implementation pending
+
+import std::net::http
+import std::net::tcp
+import std::json
+
+// ============================================
+// HTTP CLIENT EXAMPLES
+// ============================================
+
+fn http_get_example() {
+    print("=== HTTP GET Example ===")
+
+    // Simple GET request
+    let response = http.get("https://api.github.com/users/octocat")
+
+    if response.ok() {
+        print(f"Status: {response.status}")
+        print(f"Body: {response.text()}")
+    } else {
+        print(f"Error: {response.status}")
+    }
+}
+
+fn http_post_example() {
+    print("=== HTTP POST Example ===")
+
+    // POST with JSON body
+    let data = {
+        "name": "John Doe",
+        "email": "john@example.com",
+        "age": 30
+    }
+
+    let response = http.post(
+        "https://jsonplaceholder.typicode.com/users",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        json: data
+    )
+
+    if response.ok() {
+        let result = response.json()
+        print(f"Created user with ID: {result.id}")
+    }
+}
+
+fn http_with_auth() {
+    print("=== HTTP with Authentication ===")
+
+    let client = http.Client({
+        headers: {
+            "Authorization": "Bearer YOUR_TOKEN",
+            "User-Agent": "Quantum/1.0"
+        },
+        timeout: 5000  // 5 seconds
+    })
+
+    let response = client.get("https://api.example.com/protected")
+    print(response.json())
+}
+
+fn http_download_file() {
+    print("=== Download File ===")
+
+    let response = http.get("https://example.com/largefile.zip")
+
+    if response.ok() {
+        response.save_to("downloaded_file.zip")
+        print("File downloaded successfully!")
+    }
+}
+
+fn http_streaming() {
+    print("=== HTTP Streaming ===")
+
+    let response = http.get("https://api.example.com/stream")
+
+    for chunk in response.iter_chunks(8192) {
+        // Process chunk
+        print(f"Received {chunk.len()} bytes")
+    }
+}
+
+// ============================================
+// HTTP SERVER EXAMPLES
+// ============================================
+
+fn simple_http_server() {
+    print("=== Starting HTTP Server ===")
+
+    let server = http.Server()
+
+    // Route: GET /
+    server.get("/", fn(req) {
+        return http.Response(
+            status: 200,
+            body: "Hello, Quantum!"
+        )
+    })
+
+    // Route: GET /api/users
+    server.get("/api/users", fn(req) {
+        let users = [
+            {"id": 1, "name": "Alice"},
+            {"id": 2, "name": "Bob"}
+        ]
+        return http.json_response(users)
+    })
+
+    // Route: POST /api/users
+    server.post("/api/users", fn(req) {
+        let data = req.json()
+
+        // Validate
+        if !data.has("name") {
+            return http.Response(
+                status: 400,
+                body: "Missing name field"
+            )
+        }
+
+        // Create user
+        let user = {
+            "id": generate_id(),
+            "name": data.name
+        }
+
+        return http.json_response(user, status: 201)
+    })
+
+    // Route with path parameters
+    server.get("/users/:id", fn(req) {
+        let user_id = req.params.id
+        let user = db.find_user(user_id)
+
+        if user {
+            return http.json_response(user)
+        } else {
+            return http.Response(status: 404, body: "User not found")
+        }
+    })
+
+    // Middleware
+    server.use(fn(req, next) {
+        print(f"{req.method} {req.path}")
+        let response = next(req)
+        print(f"Status: {response.status}")
+        return response
+    })
+
+    // Error handler
+    server.on_error(fn(error) {
+        print(f"Server error: {error}")
+        return http.Response(
+            status: 500,
+            body: "Internal Server Error"
+        )
+    })
+
+    // Start server
+    print("Server listening on http://localhost:8080")
+    server.listen("0.0.0.0", 8080)
+}
+
+fn rest_api_server() {
+    print("=== RESTful API Server ===")
+
+    let app = http.App()
+
+    // CRUD operations for users
+    let users = []
+
+    // CREATE
+    app.post("/api/users", fn(req) {
+        let user = req.json()
+        user.id = generate_id()
+        users.push(user)
+        return http.json_response(user, status: 201)
+    })
+
+    // READ (all)
+    app.get("/api/users", fn(req) {
+        return http.json_response(users)
+    })
+
+    // READ (one)
+    app.get("/api/users/:id", fn(req) {
+        let id = req.params.id.to_int()
+        let user = users.find(|u| u.id == id)
+
+        return match user {
+            Some(u) => http.json_response(u),
+            None => http.Response(status: 404)
+        }
+    })
+
+    // UPDATE
+    app.put("/api/users/:id", fn(req) {
+        let id = req.params.id.to_int()
+        let data = req.json()
+
+        for i in 0..users.len() {
+            if users[i].id == id {
+                users[i] = {id, ...data}
+                return http.json_response(users[i])
+            }
+        }
+
+        return http.Response(status: 404)
+    })
+
+    // DELETE
+    app.delete("/api/users/:id", fn(req) {
+        let id = req.params.id.to_int()
+        users = users.filter(|u| u.id != id)
+        return http.Response(status: 204)
+    })
+
+    app.listen(8080)
+}
+
+// ============================================
+// TCP SOCKET EXAMPLES
+// ============================================
+
+fn tcp_client_example() {
+    print("=== TCP Client ===")
+
+    let socket = tcp.connect("example.com", 80)
+
+    socket.write("GET / HTTP/1.1\r\nHost: example.com\r\n\r\n")
+
+    let response = socket.read(4096)
+    print(response)
+
+    socket.close()
+}
+
+fn tcp_server_example() {
+    print("=== TCP Server ===")
+
+    let listener = tcp.listen("0.0.0.0", 9000)
+    print("TCP server listening on port 9000")
+
+    while true {
+        let client = listener.accept()
+        print(f"Client connected: {client.peer_addr()}")
+
+        // Handle client in separate task
+        spawn(fn() {
+            let data = client.read(1024)
+            print(f"Received: {data}")
+
+            client.write("Echo: " + data)
+            client.close()
+        })
+    }
+}
+
+// ============================================
+// WEBSOCKET EXAMPLE
+// ============================================
+
+fn websocket_client() {
+    print("=== WebSocket Client ===")
+
+    let ws = websocket.connect("ws://localhost:8080/ws")
+
+    ws.on_open(fn() {
+        print("Connected!")
+        ws.send("Hello from Quantum!")
+    })
+
+    ws.on_message(fn(msg) {
+        print(f"Received: {msg}")
+    })
+
+    ws.on_close(fn() {
+        print("Connection closed")
+    })
+
+    ws.on_error(fn(error) {
+        print(f"Error: {error}")
+    })
+}
+
+fn websocket_server() {
+    print("=== WebSocket Server ===")
+
+    let server = http.Server()
+
+    server.websocket("/ws", fn(ws) {
+        print("Client connected via WebSocket")
+
+        ws.on_message(fn(msg) {
+            print(f"Received: {msg}")
+
+            // Echo back
+            ws.send(f"Echo: {msg}")
+
+            // Broadcast to all clients
+            ws.broadcast(msg)
+        })
+
+        ws.on_close(fn() {
+            print("Client disconnected")
+        })
+    })
+
+    server.listen(8080)
+}
+
+// ============================================
+// MAIN
+// ============================================
+
+fn main() {
+    print("Quantum Network Programming Examples")
+    print("=====================================")
+
+    // Uncomment to run specific examples:
+
+    // http_get_example()
+    // http_post_example()
+    // http_with_auth()
+
+    // simple_http_server()  // This blocks
+    // rest_api_server()     // This blocks
+
+    // tcp_client_example()
+    // tcp_server_example()  // This blocks
+
+    // websocket_client()
+    // websocket_server()    // This blocks
+
+    print("Network examples defined. Uncomment to run!")
+}

@@ -1,0 +1,153 @@
+// Quantum standard library — collections module (array-based)
+//
+// Uses Quantum's fixed-size array support (`[int; N]` parameter syntax),
+// added alongside this rewrite. Since C arrays decay to pointers when
+// passed to a function, mutations made inside these functions (sort,
+// fill, etc.) are visible to the caller — exactly like plain C arrays.
+//
+// LIMITATION: arrays cannot currently be *returned* from a function (C
+// doesn't allow returning array types by value, and Quantum's codegen
+// doesn't wrap them in a struct to work around this yet). Every function
+// below therefore either returns a scalar (sum, max, a found index) or
+// mutates an array passed in by the caller — it never returns a new array.
+// If you need a "new array" result, allocate it in the caller and pass it
+// in as an output parameter.
+//
+// All functions take an explicit `len` parameter alongside the array,
+// since C array parameters don't carry their length at runtime.
+//
+// Usage:
+//     import collections
+//     fn main() {
+//         let nums = [5, 3, 8, 1, 9]
+//         println(array_sum(nums, 5))
+//         array_sort(nums, 5)
+//         println(nums[0])
+//     }
+
+// ── Aggregation ──────────────────────────────────────────────────────
+
+fn array_sum(arr: [int; 10], len: int) -> int {
+    let mut total = 0
+    let mut i = 0
+    while i < len {
+        total += arr[i]
+        i += 1
+    }
+    return total
+}
+
+fn array_max(arr: [int; 10], len: int) -> int {
+    let mut m = arr[0]
+    let mut i = 1
+    while i < len {
+        if arr[i] > m {
+            m = arr[i]
+        }
+        i += 1
+    }
+    return m
+}
+
+fn array_min(arr: [int; 10], len: int) -> int {
+    let mut m = arr[0]
+    let mut i = 1
+    while i < len {
+        if arr[i] < m {
+            m = arr[i]
+        }
+        i += 1
+    }
+    return m
+}
+
+fn array_average(arr: [int; 10], len: int) -> float {
+    let total = array_sum(arr, len)
+    return (total as float) / (len as float)
+}
+
+// ── Searching ────────────────────────────────────────────────────────
+
+fn array_contains(arr: [int; 10], len: int, target: int) -> bool {
+    let mut i = 0
+    while i < len {
+        if arr[i] == target {
+            return true
+        }
+        i += 1
+    }
+    return false
+}
+
+// Returns the index of the first occurrence of `target`, or -1 if not found.
+fn array_index_of(arr: [int; 10], len: int, target: int) -> int {
+    let mut i = 0
+    while i < len {
+        if arr[i] == target {
+            return i
+        }
+        i += 1
+    }
+    return -1
+}
+
+fn array_count(arr: [int; 10], len: int, target: int) -> int {
+    let mut count = 0
+    let mut i = 0
+    while i < len {
+        if arr[i] == target {
+            count += 1
+        }
+        i += 1
+    }
+    return count
+}
+
+// ── Mutation (in place — visible to the caller since arrays decay to
+//    pointers when passed to a function, same as plain C) ─────────────
+
+fn array_fill(arr: [int; 10], len: int, value: int) {
+    let mut i = 0
+    while i < len {
+        arr[i] = value
+        i += 1
+    }
+}
+
+fn array_reverse(arr: [int; 10], len: int) {
+    let mut i = 0
+    let mut j = len - 1
+    while i < j {
+        let temp = arr[i]
+        arr[i] = arr[j]
+        arr[j] = temp
+        i += 1
+        j -= 1
+    }
+}
+
+// Simple bubble sort — O(n^2), fine for the small fixed-size arrays this
+// module targets. Sorts ascending, in place.
+fn array_sort(arr: [int; 10], len: int) {
+    let mut i = 0
+    while i < len {
+        let mut j = 0
+        while j < len - i - 1 {
+            if arr[j] > arr[j + 1] {
+                let temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+            }
+            j += 1
+        }
+        i += 1
+    }
+}
+
+fn array_double_all(arr: [int; 10], len: int) {
+    let mut i = 0
+    while i < len {
+        arr[i] = arr[i] * 2
+        i += 1
+    }
+}

@@ -1,0 +1,514 @@
+// Database Integration - SQL, ORM, Migrations in Quantum
+// Full-featured database access with multiple backends
+
+import std::db
+
+// ============================================
+// RAW SQL QUERIES
+// ============================================
+
+fn raw_sql_example() {
+    print("=== Raw SQL Example ===")
+
+    // Connect to database
+    let db = db.connect("postgresql://user:pass@localhost/mydb")
+
+    // Execute query
+    let result = db.execute("
+        CREATE TABLE users (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            age INT,
+            created_at TIMESTAMP DEFAULT NOW()
+        )
+    ")
+
+    // Insert data
+    db.execute("
+        INSERT INTO users (name, email, age)
+        VALUES ($1, $2, $3)
+    ", ["Alice", "alice@example.com", 30])
+
+    // Query data
+    let rows = db.query("
+        SELECT id, name, email, age
+        FROM users
+        WHERE age > $1
+    ", [18])
+
+    for row in rows {
+        print(f"User: {row.name} ({row.email})")
+    }
+
+    // Close connection
+    db.close()
+}
+
+// ============================================
+// QUERY BUILDER
+// ============================================
+
+fn query_builder_example() {
+    print("=== Query Builder Example ===")
+
+    let db = db.connect("sqlite://app.db")
+
+    // SELECT with builder
+    let users = db.table("users")
+        .select(["id", "name", "email"])
+        .where("age", ">", 18)
+        .order_by("name", "ASC")
+        .limit(10)
+        .get()
+
+    // INSERT
+    let user_id = db.table("users")
+        .insert({
+            "name": "Bob",
+            "email": "bob@example.com",
+            "age": 25
+        })
+        .get_id()
+
+    print(f"Inserted user with ID: {user_id}")
+
+    // UPDATE
+    let affected = db.table("users")
+        .where("id", "=", user_id)
+        .update({
+            "age": 26
+        })
+
+    print(f"Updated {affected} rows")
+
+    // DELETE
+    db.table("users")
+        .where("age", "<", 18)
+        .delete()
+
+    // JOIN
+    let posts = db.table("posts")
+        .select(["posts.*", "users.name as author"])
+        .join("users", "posts.user_id", "=", "users.id")
+        .where("posts.published", "=", true)
+        .get()
+
+    // Aggregate
+    let stats = db.table("users")
+        .select([
+            db.count("*").as("total"),
+            db.avg("age").as("avg_age"),
+            db.max("age").as("max_age")
+        ])
+        .first()
+
+    print(f"Total users: {stats.total}")
+    print(f"Average age: {stats.avg_age}")
+}
+
+// ============================================
+// ORM (Object-Relational Mapping)
+// ============================================
+
+// Define models
+@model
+struct User {
+    @primary_key
+    id: int,
+
+    @required
+    @unique
+    name: String,
+
+    @required
+    @unique
+    email: String,
+
+    age: Option<int>,
+
+    @default("now")
+    created_at: DateTime,
+
+    // Relationships
+    @has_many("Post")
+    posts: Vec<Post>,
+
+    @belongs_to("Company")
+    company: Option<Company>,
+}
+
+@model
+struct Post {
+    @primary_key
+    id: int,
+
+    @required
+    title: String,
+
+    @required
+    content: String,
+
+    @foreign_key("users")
+    user_id: int,
+
+    @belongs_to("User")
+    author: User,
+
+    @default(false)
+    published: bool,
+
+    @default("now")
+    created_at: DateTime,
+}
+
+@model
+struct Company {
+    @primary_key
+    id: int,
+
+    @required
+    name: String,
+
+    @has_many("User")
+    employees: Vec<User>,
+}
+
+fn orm_example() {
+    print("=== ORM Example ===")
+
+    // Create a user
+    let user = User.create({
+        name: "Charlie",
+        email: "charlie@example.com",
+        age: 28
+    })
+
+    print(f"Created user: {user.name}")
+
+    // Find by ID
+    let found = User.find(user.id)
+
+    // Find by attribute
+    let alice = User.find_by("email", "alice@example.com")
+
+    // Query with conditions
+    let adults = User.where("age", ">=", 18)
+        .order_by("name")
+        .all()
+
+    for user in adults {
+        print(f"Adult user: {user.name}")
+    }
+
+    // Update
+    user.age = 29
+    user.save()
+
+    // Or update directly
+    User.update(user.id, {age: 30})
+
+    // Delete
+    user.delete()
+
+    // Relationships
+    let post = Post.create({
+        title: "My First Post",
+        content: "Hello, world!",
+        user_id: alice.id
+    })
+
+    // Access relationships
+    let author = post.author()  // Lazy load
+    print(f"Post author: {author.name}")
+
+    let user_posts = alice.posts()  // Get all posts
+    print(f"{alice.name} has {user_posts.len()} posts")
+
+    // Eager loading (prevent N+1 queries)
+    let users_with_posts = User.with("posts").all()
+
+    for user in users_with_posts {
+        print(f"{user.name} has {user.posts.len()} posts")
+    }
+}
+
+// ============================================
+// TRANSACTIONS
+// ============================================
+
+fn transaction_example() {
+    print("=== Transaction Example ===")
+
+    let db = db.connect("postgresql://localhost/mydb")
+
+    // Manual transaction
+    let tx = db.begin_transaction()
+
+    try {
+        tx.execute("INSERT INTO users (name, email) VALUES ($1, $2)",
+                   ["Dave", "dave@example.com"])
+
+        tx.execute("INSERT INTO posts (user_id, title) VALUES ($1, $2)",
+                   [user_id, "First Post"])
+
+        tx.commit()
+        print("Transaction committed")
+    } catch error {
+        tx.rollback()
+        print(f"Transaction failed: {error}")
+    }
+
+    // Using closure (auto-rollback on error)
+    db.transaction(fn(tx) {
+        let user = tx.insert("users", {name: "Eve", email: "eve@example.com"})
+        tx.insert("posts", {user_id: user.id, title: "Eve's Post"})
+        // Auto-commits if no error
+    })
+}
+
+// ============================================
+// MIGRATIONS
+// ============================================
+
+// Migration file: migrations/001_create_users.qtm
+migration "create_users_table" {
+    up {
+        create_table("users") {
+            id: serial().primary_key()
+            name: varchar(255).not_null()
+            email: varchar(255).unique().not_null()
+            age: integer().nullable()
+            created_at: timestamp().default("now")
+        }
+
+        add_index("users", ["email"])
+    }
+
+    down {
+        drop_table("users")
+    }
+}
+
+// Migration: migrations/002_create_posts.qtm
+migration "create_posts_table" {
+    up {
+        create_table("posts") {
+            id: serial().primary_key()
+            user_id: integer().foreign_key("users", "id").on_delete("cascade")
+            title: varchar(255).not_null()
+            content: text().not_null()
+            published: boolean().default(false)
+            created_at: timestamp().default("now")
+        }
+
+        add_index("posts", ["user_id"])
+        add_index("posts", ["published"])
+    }
+
+    down {
+        drop_table("posts")
+    }
+}
+
+// Migration: migrations/003_add_company.qtm
+migration "add_company_to_users" {
+    up {
+        add_column("users", "company_id", integer().nullable())
+        add_foreign_key("users", "company_id", "companies", "id")
+    }
+
+    down {
+        remove_foreign_key("users", "company_id")
+        remove_column("users", "company_id")
+    }
+}
+
+fn run_migrations() {
+    // Run all pending migrations
+    db.migrate()
+
+    // Run specific migration
+    db.migrate_up("create_users_table")
+
+    // Rollback last migration
+    db.migrate_down()
+
+    // Rollback to specific migration
+    db.migrate_to("create_users_table")
+
+    // Reset database (rollback all)
+    db.migrate_reset()
+
+    // Refresh database (reset + migrate)
+    db.migrate_refresh()
+}
+
+// ============================================
+// SEEDERS
+// ============================================
+
+fn seed_database() {
+    print("=== Seeding Database ===")
+
+    // Clear existing data
+    User.truncate()
+    Post.truncate()
+
+    // Create users
+    let users = [
+        {name: "Alice", email: "alice@example.com", age: 30},
+        {name: "Bob", email: "bob@example.com", age: 25},
+        {name: "Charlie", email: "charlie@example.com", age: 35}
+    ]
+
+    for user_data in users {
+        let user = User.create(user_data)
+
+        // Create posts for each user
+        for i in 1..5 {
+            Post.create({
+                user_id: user.id,
+                title: f"Post {i} by {user.name}",
+                content: f"Content for post {i}",
+                published: i % 2 == 0  // Publish every other post
+            })
+        }
+    }
+
+    print("Database seeded successfully!")
+}
+
+// ============================================
+// CONNECTION POOLING
+// ============================================
+
+fn connection_pool_example() {
+    print("=== Connection Pool Example ===")
+
+    // Create pool
+    let pool = db.create_pool({
+        url: "postgresql://localhost/mydb",
+        max_connections: 10,
+        min_connections: 2,
+        connection_timeout: 5000,  // 5 seconds
+        idle_timeout: 60000,       // 1 minute
+    })
+
+    // Get connection from pool
+    let conn = pool.get_connection()
+
+    // Use connection
+    let users = conn.query("SELECT * FROM users")
+
+    // Connection automatically returns to pool when dropped
+    drop(conn)
+
+    // Or use with closure
+    pool.with_connection(fn(conn) {
+        conn.execute("INSERT INTO users (name, email) VALUES ($1, $2)",
+                     ["Frank", "frank@example.com"])
+    })
+}
+
+// ============================================
+// DATABASE BACKENDS
+// ============================================
+
+fn multi_database_example() {
+    // PostgreSQL
+    let pg = db.connect("postgresql://localhost/mydb")
+
+    // MySQL
+    let mysql = db.connect("mysql://localhost/mydb")
+
+    // SQLite
+    let sqlite = db.connect("sqlite://app.db")
+
+    // MongoDB (NoSQL)
+    let mongo = db.connect("mongodb://localhost/mydb")
+
+    // Redis (Key-Value)
+    let redis = db.connect("redis://localhost")
+
+    // Use Redis
+    redis.set("key", "value")
+    let value = redis.get("key")
+
+    redis.setex("session:123", 3600, "user_data")  // Expire in 1 hour
+
+    // Use MongoDB
+    let collection = mongo.collection("users")
+
+    collection.insert_one({
+        name: "George",
+        email: "george@example.com",
+        tags: ["admin", "developer"]
+    })
+
+    let docs = collection.find({age: {$gt: 18}})
+}
+
+// ============================================
+// ADVANCED QUERIES
+// ============================================
+
+fn advanced_queries() {
+    // Subqueries
+    let young_users_with_posts = User.where_in(
+        "id",
+        Post.select("user_id").where("published", "=", true)
+    ).all()
+
+    // Window functions
+    let ranked = db.query("
+        SELECT
+            name,
+            age,
+            RANK() OVER (ORDER BY age DESC) as age_rank
+        FROM users
+    ")
+
+    // Common Table Expressions (CTE)
+    let result = db.query("
+        WITH active_users AS (
+            SELECT * FROM users WHERE last_login > NOW() - INTERVAL '7 days'
+        )
+        SELECT * FROM active_users WHERE age > 18
+    ")
+
+    // JSON queries (PostgreSQL)
+    let jsonb_data = db.query("
+        SELECT data->>'name' as name
+        FROM json_table
+        WHERE data @> '{\"active\": true}'
+    ")
+
+    // Full-text search
+    let search_results = db.query("
+        SELECT * FROM posts
+        WHERE to_tsvector('english', content) @@ to_tsquery('quantum & language')
+    ")
+}
+
+// ============================================
+// MAIN
+// ============================================
+
+fn main() {
+    print("Quantum Database Integration Examples")
+    print("======================================")
+
+    // Run examples (uncomment to use)
+    // raw_sql_example()
+    // query_builder_example()
+    // orm_example()
+    // transaction_example()
+    // run_migrations()
+    // seed_database()
+    // connection_pool_example()
+    // multi_database_example()
+    // advanced_queries()
+
+    print("Database examples defined!")
+}

@@ -1,0 +1,72 @@
+// Control flow example - demonstrates all control structures
+
+fn classify_number(n: int) -> String {
+    if n < 0 {
+        return "negative"
+    } else if n == 0 {
+        return "zero"
+    } else {
+        return "positive"
+    }
+}
+
+fn is_prime(n: int) -> bool {
+    if n < 2 {
+        return false
+    }
+
+    let mut i = 2
+    while i * i <= n {
+        if n % i == 0 {
+            return false
+        }
+        i = i + 1
+    }
+
+    return true
+}
+
+fn factorial(n: int) -> int {
+    if n <= 1 {
+        return 1
+    }
+    return n * factorial(n - 1)
+}
+
+fn count_to_n(n: int) {
+    let mut i = 1
+    while i <= n {
+        print(i)
+        i = i + 1
+    }
+}
+
+fn main() {
+    // If-else
+    let num = -5
+    let classification = classify_number(num)
+    print("Classification of -5:")
+    print(classification)
+
+    // While loop with complex condition
+    let n = 13
+    if is_prime(n) {
+        print("13 is prime!")
+    } else {
+        print("13 is not prime")
+    }
+
+    // Recursion
+    let fact = factorial(5)
+    print("Factorial of 5:")
+    print(fact)
+
+    // Loop
+    print("Counting to 5:")
+    count_to_n(5)
+
+    // For loop (when implemented)
+    // for i in 0..10 {
+    //     print(i)
+    // }
+}

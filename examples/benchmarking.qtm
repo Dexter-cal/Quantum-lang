@@ -1,0 +1,523 @@
+// Quantum Benchmarking and Profiling - Performance measurement tools
+
+import std::time
+import std::bench
+import std::profile
+
+// ============================================
+// BASIC BENCHMARKING
+// ============================================
+
+fn simple_benchmark() {
+    print("=== Simple Benchmark ===")
+
+    // Time a single operation
+    let start = time.now()
+
+    // Code to benchmark
+    let mut sum = 0
+    for i in 0..1000000 {
+        sum += i
+    }
+
+    let duration = time.since(start)
+    print(f"Operation took: {duration}ms")
+    print(f"Sum: {sum}")
+}
+
+// Using benchmark helper
+fn benchmark_function() {
+    bench.measure("sum_loop", fn() {
+        let mut sum = 0
+        for i in 0..1000000 {
+            sum += i
+        }
+        return sum
+    })
+
+    // Output:
+    // sum_loop: 2.345ms (avg over 10 iterations)
+}
+
+// ============================================
+// COMPARATIVE BENCHMARKING
+// ============================================
+
+fn compare_algorithms() {
+    print("=== Comparing Algorithms ===")
+
+    let data = generate_test_data(10000)
+
+    // Benchmark multiple implementations
+    let results = bench.compare({
+        "bubble_sort": fn() { bubble_sort(data.clone()) },
+        "quick_sort": fn() { quick_sort(data.clone()) },
+        "merge_sort": fn() { merge_sort(data.clone()) },
+        "heap_sort": fn() { heap_sort(data.clone()) },
+    })
+
+    // Print comparison table
+    results.print_table()
+
+    // Output:
+    // Algorithm      | Time (avg)  | Relative
+    // --------------|-------------|----------
+    // quick_sort    | 1.234ms     | 1.00x (fastest)
+    // merge_sort    | 1.456ms     | 1.18x
+    // heap_sort     | 1.789ms     | 1.45x
+    // bubble_sort   | 45.678ms    | 37.01x (slowest)
+}
+
+// ============================================
+// STATISTICAL BENCHMARKING
+// ============================================
+
+fn statistical_benchmark() {
+    print("=== Statistical Benchmark ===")
+
+    let stats = bench.run_statistical(
+        fn() {
+            compute_fibonacci(30)
+        },
+        iterations: 100,
+        warmup: 10
+    )
+
+    print(f"Mean: {stats.mean}ms")
+    print(f"Median: {stats.median}ms")
+    print(f"Std Dev: {stats.std_dev}ms")
+    print(f"Min: {stats.min}ms")
+    print(f"Max: {stats.max}ms")
+    print(f"95th percentile: {stats.p95}ms")
+    print(f"99th percentile: {stats.p99}ms")
+
+    // Detect outliers
+    if stats.has_outliers() {
+        print(f"Warning: {stats.outlier_count} outliers detected")
+    }
+}
+
+// ============================================
+// MEMORY BENCHMARKING
+// ============================================
+
+fn memory_benchmark() {
+    print("=== Memory Benchmark ===")
+
+    let mem_stats = bench.measure_memory(fn() {
+        // Allocate memory
+        let mut vectors = []
+        for i in 0..1000 {
+            vectors.push(Vec::with_capacity(1000))
+        }
+        return vectors
+    })
+
+    print(f"Memory allocated: {mem_stats.allocated_bytes} bytes")
+    print(f"Peak memory: {mem_stats.peak_bytes} bytes")
+    print(f"Allocations: {mem_stats.allocation_count}")
+    print(f"Deallocations: {mem_stats.deallocation_count}")
+}
+
+// ============================================
+// PROFILING
+// ============================================
+
+fn profile_example() {
+    print("=== Profiling Example ===")
+
+    // Start profiler
+    profile.start()
+
+    // Code to profile
+    process_data()
+    compute_statistics()
+    render_results()
+
+    // Stop and get results
+    let report = profile.stop()
+
+    // Print flame graph
+    report.print_flame_graph()
+
+    // Print call tree
+    report.print_call_tree()
+
+    // Print hotspots
+    report.print_hotspots(top: 10)
+}
+
+// ============================================
+// CPU PROFILING
+// ============================================
+
+fn cpu_profiling() {
+    print("=== CPU Profiling ===")
+
+    let profiler = profile.cpu()
+    profiler.start()
+
+    // CPU-intensive work
+    for i in 0..1000 {
+        compute_heavy_task(i)
+    }
+
+    let report = profiler.stop()
+
+    // Function call statistics
+    for func in report.functions() {
+        print(f"{func.name}:")
+        print(f"  Total time: {func.total_time}ms")
+        print(f"  Self time: {func.self_time}ms")
+        print(f"  Calls: {func.call_count}")
+        print(f"  Avg time: {func.avg_time}ms")
+    }
+
+    // Save profile data
+    report.save("cpu_profile.json")
+}
+
+// ============================================
+// MEMORY PROFILING
+// ============================================
+
+fn memory_profiling() {
+    print("=== Memory Profiling ===")
+
+    let profiler = profile.memory()
+    profiler.start()
+
+    // Memory operations
+    let large_vec = Vec::with_capacity(1_000_000)
+    let hash_map = HashMap::new()
+    for i in 0..10000 {
+        hash_map.insert(i, format!("value_{i}"))
+    }
+
+    let snapshot = profiler.snapshot()
+
+    // More allocations
+    let more_data = allocate_more_memory()
+
+    let final_snapshot = profiler.stop()
+
+    // Compare snapshots
+    let diff = snapshot.compare(final_snapshot)
+
+    print(f"Memory growth: {diff.growth_bytes} bytes")
+    print(f"New allocations: {diff.new_allocations}")
+
+    // Find memory leaks
+    let leaks = profiler.find_leaks()
+    for leak in leaks {
+        print(f"Potential leak at {leak.location}: {leak.size} bytes")
+    }
+}
+
+// ============================================
+// CUSTOM METRICS
+// ============================================
+
+fn custom_metrics() {
+    print("=== Custom Metrics ===")
+
+    let metrics = bench.MetricsCollector::new()
+
+    // Add custom metrics
+    metrics.track("requests_processed", 0)
+    metrics.track("errors", 0)
+    metrics.track("latency_sum", 0.0)
+
+    // Simulate work
+    for i in 0..100 {
+        let start = time.now()
+
+        let success = process_request(i)
+
+        let latency = time.since(start)
+
+        metrics.increment("requests_processed")
+        metrics.add("latency_sum", latency)
+
+        if !success {
+            metrics.increment("errors")
+        }
+    }
+
+    // Calculate statistics
+    let total_requests = metrics.get("requests_processed")
+    let error_rate = metrics.get("errors") / total_requests
+    let avg_latency = metrics.get("latency_sum") / total_requests
+
+    print(f"Total requests: {total_requests}")
+    print(f"Error rate: {error_rate * 100}%")
+    print(f"Average latency: {avg_latency}ms")
+}
+
+// ============================================
+// REGRESSION TESTING
+// ============================================
+
+fn regression_benchmark() {
+    print("=== Regression Benchmark ===")
+
+    // Define baseline performance
+    let baseline = bench.Baseline::load("baseline.json")
+
+    // Run current benchmarks
+    let current = bench.run_suite({
+        "algorithm_a": fn() { algorithm_a() },
+        "algorithm_b": fn() { algorithm_b() },
+        "algorithm_c": fn() { algorithm_c() },
+    })
+
+    // Compare with baseline
+    let comparison = current.compare_with(baseline)
+
+    for result in comparison {
+        let change = result.percent_change()
+        let status = if change > 10.0 {
+            "REGRESSION"
+        } else if change < -10.0 {
+            "IMPROVEMENT"
+        } else {
+            "OK"
+        }
+
+        print(f"{result.name}: {change:+.2f}% [{status}]")
+    }
+
+    // Fail if regression detected
+    if comparison.has_regression(threshold: 10.0) {
+        panic!("Performance regression detected!")
+    }
+
+    // Update baseline if improved
+    if comparison.all_improved() {
+        current.save_as_baseline("baseline.json")
+    }
+}
+
+// ============================================
+// PARALLEL BENCHMARKING
+// ============================================
+
+fn parallel_benchmark() {
+    print("=== Parallel Benchmark ===")
+
+    // Benchmark single-threaded
+    let single = bench.measure("single_threaded", fn() {
+        for i in 0..1000 {
+            heavy_computation(i)
+        }
+    })
+
+    // Benchmark multi-threaded
+    let multi = bench.measure("multi_threaded", fn() {
+        parallel_for(0..1000, fn(i) {
+            heavy_computation(i)
+        })
+    })
+
+    let speedup = single.time / multi.time
+    print(f"Speedup: {speedup}x")
+
+    // Measure scalability
+    let scalability = bench.measure_scalability(
+        fn(threads) {
+            parallel_for_with_threads(0..1000, threads, fn(i) {
+                heavy_computation(i)
+            })
+        },
+        thread_counts: [1, 2, 4, 8, 16]
+    )
+
+    scalability.print_chart()
+}
+
+// ============================================
+// MICRO-BENCHMARKING
+// ============================================
+
+fn micro_benchmark() {
+    print("=== Micro-Benchmark ===")
+
+    // Benchmark very small operations
+    let bench = bench.Micro::new()
+
+    // Benchmark HashMap insert
+    bench.run("hashmap_insert", iterations: 1_000_000, fn() {
+        let map = HashMap::new()
+        map.insert("key", "value")
+    })
+
+    // Benchmark Vec push
+    bench.run("vec_push", iterations: 1_000_000, fn() {
+        let vec = Vec::new()
+        vec.push(42)
+    })
+
+    // Benchmark string concatenation
+    bench.run("string_concat", iterations: 1_000_000, fn() {
+        let s = "hello" + " world"
+    })
+
+    // Print results in nanoseconds
+    bench.print_results(unit: "ns")
+}
+
+// ============================================
+// REAL-WORLD SCENARIO BENCHMARKS
+// ============================================
+
+fn scenario_benchmark() {
+    print("=== Scenario Benchmark ===")
+
+    // Simulate real-world API server load
+    let scenario = bench.Scenario::new("api_server")
+
+    scenario.add_step("parse_request", fn() {
+        parse_json_request(test_payload)
+    })
+
+    scenario.add_step("validate", fn() {
+        validate_request(request)
+    })
+
+    scenario.add_step("database_query", fn() {
+        db.query("SELECT * FROM users WHERE id = $1", [user_id])
+    })
+
+    scenario.add_step("serialize_response", fn() {
+        to_json(response)
+    })
+
+    // Run scenario 1000 times
+    let results = scenario.run(iterations: 1000)
+
+    // Print step breakdown
+    results.print_breakdown()
+
+    // Output:
+    // Step               | Time    | % of Total
+    // -------------------|---------|------------
+    // parse_request      | 0.5ms   | 10%
+    // validate           | 0.2ms   | 4%
+    // database_query     | 3.8ms   | 76%
+    // serialize_response | 0.5ms   | 10%
+    // -------------------|---------|------------
+    // Total              | 5.0ms   | 100%
+}
+
+// ============================================
+// CONTINUOUS BENCHMARKING
+// ============================================
+
+fn continuous_benchmark() {
+    print("=== Continuous Benchmark ===")
+
+    // Run benchmarks and upload results
+    let results = bench.run_all()
+
+    // Upload to tracking service
+    results.upload_to("https://bench.myapp.com/api/results", {
+        commit: git.current_commit(),
+        branch: git.current_branch(),
+        timestamp: time.now(),
+    })
+
+    // Generate trend report
+    let trends = bench.fetch_trends(days: 30)
+    trends.plot_graph("benchmark_trends.png")
+
+    // Alert on regression
+    if trends.has_regression(threshold: 5.0) {
+        send_alert("Performance regression detected!")
+    }
+}
+
+// ============================================
+// BENCHMARK ANNOTATIONS
+// ============================================
+
+#[benchmark(iterations = 1000, warmup = 10)]
+fn bench_fibonacci() {
+    fibonacci(30)
+}
+
+#[benchmark(name = "custom_name", group = "algorithms")]
+fn bench_sorting() {
+    quick_sort(generate_test_data(1000))
+}
+
+#[benchmark(ignore)]  // Skip this benchmark
+fn bench_slow_operation() {
+    very_slow_operation()
+}
+
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+fn bubble_sort(arr: [int]) -> [int] {
+    let mut arr = arr
+    for i in 0..arr.len() {
+        for j in 0..(arr.len() - i - 1) {
+            if arr[j] > arr[j + 1] {
+                let temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+            }
+        }
+    }
+    return arr
+}
+
+fn quick_sort(arr: [int]) -> [int] {
+    if arr.len() <= 1 {
+        return arr
+    }
+    // Quick sort implementation...
+    return arr
+}
+
+fn compute_fibonacci(n: int) -> int {
+    if n <= 1 {
+        return n
+    }
+    return compute_fibonacci(n - 1) + compute_fibonacci(n - 2)
+}
+
+fn generate_test_data(size: int) -> [int] {
+    let mut data = []
+    for i in 0..size {
+        data.push(random.int(0, 1000))
+    }
+    return data
+}
+
+// ============================================
+// MAIN
+// ============================================
+
+fn main() {
+    print("Quantum Benchmarking & Profiling Examples")
+    print("==========================================")
+
+    // simple_benchmark()
+    // benchmark_function()
+    // compare_algorithms()
+    // statistical_benchmark()
+    // memory_benchmark()
+    // profile_example()
+    // cpu_profiling()
+    // memory_profiling()
+    // custom_metrics()
+    // regression_benchmark()
+    // parallel_benchmark()
+    // micro_benchmark()
+    // scenario_benchmark()
+    // continuous_benchmark()
+
+    print("All benchmarking utilities ready!")
+}

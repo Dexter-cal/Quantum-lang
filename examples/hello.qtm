@@ -1,0 +1,5 @@
+// Hello World in Quantum Language
+fn main() {
+    println("Hello, Quantum World!")
+    println("Version: 2.1")
+}

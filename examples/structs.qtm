@@ -1,0 +1,42 @@
+// Struct example - demonstrates custom types
+
+struct Person {
+    name: String,
+    age: int,
+    email: String
+}
+
+struct Rectangle {
+    width: int,
+    height: int
+}
+
+fn create_person(name: String, age: int) -> Person {
+    return Person {
+        name: name,
+        age: age,
+        email: "unknown@example.com"
+    }
+}
+
+fn area(rect: Rectangle) -> int {
+    return rect.width * rect.height
+}
+
+fn main() {
+    // Create a person
+    let alice = create_person("Alice", 30)
+    print("Person created:")
+    print(alice.name)
+    print(alice.age)
+
+    // Create a rectangle
+    let rect = Rectangle {
+        width: 10,
+        height: 20
+    }
+
+    let a = area(rect)
+    print("Rectangle area:")
+    print(a)
+}

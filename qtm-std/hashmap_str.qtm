@@ -1,0 +1,51 @@
+// qtm-std/hashmap_str.qtm -- string-keyed hash map (string -> int)
+// Backed by q_strmap_* C preamble functions (FNV-1a, open-addressing).
+//
+// Usage:
+//   import hashmap_str
+//   let m = strmaps_new()
+//   strmaps_insert(m, "hello", 42)
+//   println(strmaps_get(m, "hello").unwrap())  // 42
+//   strmaps_free(m)
+
+fn strmaps_new() -> i64 {
+    return q_strmap_new(16)
+}
+
+fn strmaps_insert(m: i64, key: string, value: int) {
+    q_strmap_insert(m, key, value)
+}
+
+fn strmaps_get(m: i64, key: string) -> Result<int, string> {
+    let out_buf = q_alloc(8)
+    let found = q_strmap_get(m, key, out_buf)
+    if found != 0 {
+        let val = q_read_i64(out_buf, 0)
+        q_free(out_buf)
+        return Ok(val)
+    }
+    q_free(out_buf)
+    return Err("Key not found")
+}
+
+fn strmaps_contains(m: i64, key: string) -> bool {
+    return q_strmap_contains(m, key) != 0
+}
+
+fn strmaps_get_or(m: i64, key: string, default: int) -> int {
+    let r = strmaps_get(m, key)
+    if r.is_ok { return r.value }
+    return default
+}
+
+fn strmaps_len(m: i64) -> int {
+    return q_strmap_len(m)
+}
+
+fn strmaps_is_empty(m: i64) -> bool {
+    return q_strmap_len(m) == 0
+}
+
+fn strmaps_free(m: i64) {
+    q_strmap_free(m)
+}

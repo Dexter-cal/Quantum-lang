@@ -1,0 +1,104 @@
+{
+  "Function": {
+    "prefix": "fn",
+    "body": [
+      "fn ${1:function_name}(${2:params}) -> ${3:return_type} {",
+      "    ${4:// body}",
+      "}"
+    ],
+    "description": "Create a function"
+  },
+  "Main Function": {
+    "prefix": "main",
+    "body": [
+      "fn main() {",
+      "    ${1:// code}",
+      "}"
+    ],
+    "description": "Create main function"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} {",
+      "    ${2:// code}",
+      "}"
+    ],
+    "description": "Create if statement"
+  },
+  "If-Else Statement": {
+    "prefix": "ifelse",
+    "body": [
+      "if ${1:condition} {",
+      "    ${2:// true branch}",
+      "} else {",
+      "    ${3:// false branch}",
+      "}"
+    ],
+    "description": "Create if-else statement"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:collection} {",
+      "    ${3:// code}",
+      "}"
+    ],
+    "description": "Create for loop"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition} {",
+      "    ${2:// code}",
+      "}"
+    ],
+    "description": "Create while loop"
+  },
+  "Struct": {
+    "prefix": "struct",
+    "body": [
+      "struct ${1:Name} {",
+      "    ${2:field}: ${3:Type}",
+      "}"
+    ],
+    "description": "Create struct"
+  },
+  "Enum": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:Name} {",
+      "    ${2:Variant}",
+      "}"
+    ],
+    "description": "Create enum"
+  },
+  "AI Model": {
+    "prefix": "model",
+    "body": [
+      "model ${1:ModelName} {",
+      "    ${2:layer1}: qai.layers.${3:Dense}(${4:size}),",
+      "    ",
+      "    forward(x) {",
+      "        let x = self.${2:layer1}(x)",
+      "        return x",
+      "    }",
+      "}"
+    ],
+    "description": "Create AI model"
+  },
+  "Print": {
+    "prefix": "print",
+    "body": [
+      "print(${1:message})"
+    ],
+    "description": "Print to console"
+  },
+  "Import": {
+    "prefix": "import",
+    "body": [
+      "import ${1:module}"
+    ],
+    "description": "Import module"
+  }
+}
