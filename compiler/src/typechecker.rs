@@ -82,6 +82,12 @@ impl TypeChecker {
         // Add built-in functions
         checker.add_builtin("print", vec![Type::String], Type::Void);
         checker.add_builtin("println", vec![Type::String], Type::Void);
+        // Type conversion builtins (Python-style string(x), int(x), float(x), bool(x)) and help()
+        checker.add_builtin("string", vec![Type::Inferred], Type::String);
+        checker.add_builtin("int",    vec![Type::Inferred], Type::Int);
+        checker.add_builtin("float",  vec![Type::Inferred], Type::Float);
+        checker.add_builtin("bool",   vec![Type::Inferred], Type::Bool);
+        checker.add_builtin("help",   vec![Type::Inferred], Type::String);
         // Memory primitives - pointers use I64 (64-bit addresses)
         checker.add_builtin("q_alloc",    vec![Type::Int],                       Type::I64);
         checker.add_builtin("q_realloc",  vec![Type::I64, Type::Int],            Type::I64);
@@ -806,6 +812,7 @@ impl TypeChecker {
                 const BUILTINS: &[&str] = &[
                     "print", "println", "eprint", "eprintln",
                     "len", "push", "pop", "range", "assert",
+                    "string", "int", "float", "bool", "help",
                     "to_string", "parse_int", "parse_float",
                     "sqrt", "abs", "pow", "sin", "cos", "tan",
                     "floor", "ceil", "round", "min", "max",
