@@ -1,0 +1,47 @@
+// qtm-std/time.qtm — Quantum Standard Library Date & Time Module
+// FFI bindings for system time, sleep, timestamps, and formatting
+
+extern "C" {
+    fn time(ptr: int) -> int
+    fn usleep(usec: int) -> int
+    fn clock() -> int
+}
+
+fn now() -> int {
+    return time(0)
+}
+
+fn sleep_ms(ms: int) {
+    usleep(ms * 1000)
+}
+
+fn sleep_sec(sec: int) {
+    usleep(sec * 1000000)
+}
+
+fn clock_ticks() -> int {
+    return clock()
+}
+
+fn is_leap_year(year: int) -> bool {
+    if year % 400 == 0 { return true }
+    if year % 100 == 0 { return false }
+    return year % 4 == 0
+}
+
+fn format_duration_sec(seconds: int) -> string {
+    let mins = seconds / 60
+    let secs = seconds % 60
+    let hrs  = mins / 60
+    let m    = mins % 60
+
+    if hrs > 0 {
+        return hrs.to_string() + "h " + m.to_string() + "m " + secs.to_string() + "s"
+    } else {
+        if m > 0 {
+            return m.to_string() + "m " + secs.to_string() + "s"
+        } else {
+            return secs.to_string() + "s"
+        }
+    }
+}

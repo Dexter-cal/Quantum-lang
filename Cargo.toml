@@ -6,6 +6,7 @@ members = [
     "stdlib",
     "quantumai",
     "quantumai-sys",
+    "quantum-idle",
 ]
 resolver = "2"
 

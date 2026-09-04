@@ -1,0 +1,54 @@
+// qtm-std/ui.qtm — Quantum Terminal UI Framework
+// ANSI escape codes, box drawing, headers, and progress bar components
+
+fn bold(text: string) -> string {
+    return "\x1b[1m" + text + "\x1b[0m"
+}
+
+fn red(text: string) -> string {
+    return "\x1b[31m" + text + "\x1b[0m"
+}
+
+fn green(text: string) -> string {
+    return "\x1b[32m" + text + "\x1b[0m"
+}
+
+fn yellow(text: string) -> string {
+    return "\x1b[33m" + text + "\x1b[0m"
+}
+
+fn blue(text: string) -> string {
+    return "\x1b[34m" + text + "\x1b[0m"
+}
+
+fn cyan(text: string) -> string {
+    return "\x1b[36m" + text + "\x1b[0m"
+}
+
+fn draw_box(title: string, content: string) {
+    println("┌─ " + title + " " + "────────────────────────────┐")
+    println("│ " + content)
+    println("└─────────────────────────────────────────┘")
+}
+
+fn print_banner(app_name: string, version: string) {
+    println("=========================================")
+    println("   ⚡ " + app_name + " v" + version)
+    println("=========================================")
+}
+
+fn progress_bar(percent: int, width: int) {
+    let filled = percent * width / 100
+    let mut bar = "["
+    let mut i = 0
+    while i < width {
+        if i < filled {
+            bar = bar + "="
+        } else {
+            bar = bar + " "
+        }
+        i = i + 1
+    }
+    bar = bar + "] " + percent.to_string() + "%"
+    println(bar)
+}

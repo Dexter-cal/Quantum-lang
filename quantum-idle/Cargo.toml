@@ -1,0 +1,10 @@
+[package]
+name = "quantum-idle"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+colored = { workspace = true }
+anyhow = { workspace = true }
+quantum-compiler = { path = "../compiler" }
+quantumai = { path = "../quantumai" }

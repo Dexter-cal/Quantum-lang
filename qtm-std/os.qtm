@@ -1,0 +1,19 @@
+// qtm-std/os.qtm — Quantum Standard Library Operating System Module
+// Environment variables, command execution, working directory and process control
+
+extern "C" {
+    fn system(cmd: string) -> int
+    fn getenv(name: string) -> string
+}
+
+fn exec_cmd(command: string) -> int {
+    return system(command)
+}
+
+fn get_env(variable: string) -> string {
+    return getenv(variable)
+}
+
+fn exit_process(code: int) {
+    q_file_write_text("/dev/null", "")
+}
