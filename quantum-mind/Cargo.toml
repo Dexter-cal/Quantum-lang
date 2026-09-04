@@ -1,0 +1,19 @@
+[package]
+name = "quantum-mind"
+version = "1.0.0"
+edition = "2021"
+description = "QuantumMind — The AI coding assistant for Quantum Language"
+authors = ["Quantum Team"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+quantumai = { path = "../quantumai" }
+
+[lib]
+name = "quantum_mind"
+path = "src/lib.rs"
+
+[[bin]]
+name = "qmind"
+path = "src/main.rs"

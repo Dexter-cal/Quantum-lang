@@ -1,0 +1,29 @@
+// qtm-std/strings.qtm — String methods for Quantum
+// Import with: import strings
+// Then use: string_len("hello"), string_upper("hello"), etc.
+
+fn string_len(s: string) -> int { return q_str_len(s) }
+fn string_upper(s: string) -> string { return q_str_to_upper(s) }
+fn string_lower(s: string) -> string { return q_str_to_lower(s) }
+fn string_trim(s: string) -> string { return q_str_trim(s) }
+fn string_contains(s: string, sub: string) -> bool { return q_str_contains(s, sub) != 0 }
+fn string_starts_with(s: string, prefix: string) -> bool { return q_str_starts_with(s, prefix) != 0 }
+fn string_ends_with(s: string, suffix: string) -> bool { return q_str_ends_with(s, suffix) != 0 }
+fn string_replace(s: string, find: string, replace: string) -> string {
+    return q_str_replace(s, find, replace)
+}
+fn string_before(s: string, delimiter: string) -> string { return q_str_split_first(s, delimiter) }
+fn string_after(s: string, delimiter: string) -> string { return q_str_split_last(s, delimiter) }
+fn string_char_at(s: string, index: int) -> int { return q_str_index(s, index) }
+fn string_substr(s: string, start: int, length: int) -> string { return q_str_substr(s, start, length) }
+fn string_repeat(s: string, n: int) -> string { return q_str_repeat(s, n) }
+fn string_from_int(n: int) -> string { return q_str_from_int(n) }
+fn string_from_float(f: float) -> string { return q_str_from_float(f) }
+fn string_to_int(s: string) -> int { return q_str_parse_int(s) }
+fn string_to_float(s: string) -> float { return q_str_parse_float(s) }
+fn string_is_empty(s: string) -> bool { return q_str_len(s) == 0 }
+fn string_pad_left(s: string, width: int, pad: string) -> string {
+    let diff = width - q_str_len(s)
+    if diff <= 0 { return s }
+    return q_str_replace(q_str_repeat(pad, diff), "", "") + s
+}

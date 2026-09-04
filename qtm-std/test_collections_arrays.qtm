@@ -1,0 +1,29 @@
+import collections_arrays
+
+fn main() {
+    let nums = [5, 3, 8, 1, 9, 0, 0, 0, 0, 0]
+    println(array_sum(nums, 5))
+    println(array_max(nums, 5))
+    println(array_min(nums, 5))
+    println(array_average(nums, 5))
+    println(array_contains(nums, 5, 8))
+    println(array_contains(nums, 5, 100))
+    println(array_index_of(nums, 5, 8))
+    println(array_count(nums, 5, 5))
+
+    array_sort(nums, 5)
+    println(nums[0])
+    println(nums[1])
+    println(nums[2])
+    println(nums[3])
+    println(nums[4])
+
+    array_reverse(nums, 5)
+    println(nums[0])
+    println(nums[4])
+
+    let filled = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    array_fill(filled, 5, 7)
+    println(filled[0])
+    println(filled[4])
+}

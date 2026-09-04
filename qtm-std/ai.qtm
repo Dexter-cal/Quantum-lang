@@ -1,0 +1,1123 @@
+// qtm-std/ai.qtm -- QuantumAI v2.1 Full API
+// These directives auto-link the QuantumAI shared library.
+// Set QAI_LIB_PATH env var or adjust #lib-path to your build directory.
+#link "quantumai_sys"
+#lib-path "/usr/local/lib/quantum"
+
+// qtm-std/ai.qtm -- QuantumAI v2.1 Full API
+// Neural networks, AutoML, benchmarks, NLP, GANs, VAEs, RL, and more.
+//
+// Quick start:
+//   import ai as qai
+//   let model = qai.create("classifier")
+//   let ds = qai.data.make_classification(1000, 8, 4)
+//   qai.model.train(model, ds, epochs: 100, verbose: true)
+//   println(qai.model.accuracy(model, ds))
+//
+// Full docs: see QUANTUMAI_REFERENCE.md
+// Requires: --link quantumai_sys --lib-path /path/to/libquantumai_sys.so
+
+extern "C" {
+    // Tensor
+    fn qai_tensor_free(h: i64)
+    fn qai_tensor_len(h: i64) -> int
+    fn qai_tensor_ndim(h: i64) -> int
+    fn qai_tensor_dim(h: i64, ax: int) -> int
+    fn qai_tensor_get(h: i64, i: int) -> float
+    fn qai_tensor_set(h: i64, i: int, v: float)
+    fn qai_tensor_sum(h: i64) -> float
+    fn qai_tensor_mean(h: i64) -> float
+    fn qai_tensor_max(h: i64) -> float
+    fn qai_tensor_min(h: i64) -> float
+    fn qai_tensor_argmax(h: i64) -> int
+    fn qai_tensor_std(h: i64) -> float
+    fn qai_tensor_print(h: i64)
+    fn qai_tensor_from_buf(ptr: i64, len: int, rows: int, cols: int) -> i64
+
+    // Sequential (low-level model builder)
+    fn qai_seq_new() -> i64
+    fn qai_seq_free(h: i64)
+    fn qai_seq_dense(h: i64, in_f: int, out_f: int, activation: string)
+    fn qai_seq_batchnorm(h: i64, features: int)
+    fn qai_seq_layernorm(h: i64, features: int)
+    fn qai_seq_dropout(h: i64, rate: float)
+    fn qai_seq_embedding(h: i64, vocab: int, dim: int)
+    fn qai_seq_compile(h: i64, optimizer: string, loss: string, lr: float)
+    fn qai_seq_summary(h: i64)
+    fn qai_seq_fit(h: i64, ds: i64, epochs: int, batch: int, verbose: int)
+    fn qai_seq_fit_xy(h: i64, xp: i64, xl: int, xd: int, yp: i64, yl: int, yd: int, ep: int, bs: int, v: int)
+    fn qai_seq_predict(h: i64, ds: i64) -> i64
+    fn qai_seq_predict_one(h: i64, xp: i64, xd: int) -> i64
+    fn qai_seq_predict_class(h: i64, xp: i64, xd: int) -> int
+    fn qai_seq_accuracy(h: i64, ds: i64) -> float
+    fn qai_seq_save(h: i64, path: string)
+    fn qai_seq_load(h: i64, path: string) -> int
+
+    // High-level Model
+    fn qai_model_create(task: string) -> i64
+    fn qai_model_load_pretrained(name: string, pretrained: int) -> i64
+    fn qai_model_free(h: i64)
+    fn qai_model_train(h: i64, ds: i64, ep: i64, verbose: int)
+    fn qai_model_predict_class(h: i64, xp: i64, xd: int) -> int
+    fn qai_model_summary(h: i64)
+    fn qai_model_save(h: i64, path: string)
+    fn qai_model_plot_history(h: i64)
+
+    // Dataset
+    fn qai_ds_free(h: i64)
+    fn qai_ds_n_samples(h: i64) -> int
+    fn qai_ds_n_features(h: i64) -> int
+    fn qai_ds_n_classes(h: i64) -> int
+    fn qai_ds_x(h: i64) -> i64
+    fn qai_ds_y(h: i64) -> i64
+    fn qai_ds_normalize(h: i64)
+    fn qai_ds_shuffle(h: i64)
+    fn qai_ds_info(h: i64)
+    fn qai_ds_split_train(h: i64, r: float) -> i64
+    fn qai_ds_split_test(h: i64, r: float) -> i64
+
+    // Synthetic datasets
+    fn qai_make_xor(n: int) -> i64
+    fn qai_make_sine(n: int) -> i64
+    fn qai_make_classification(n: int, nf: int, nc: int) -> i64
+    fn qai_make_moons(n: int, noise: float) -> i64
+    fn qai_make_circles(n: int, noise: float) -> i64
+    fn qai_make_regression(n: int, nf: int, noise: float) -> i64
+    fn qai_make_iris(n: int) -> i64
+    fn qai_make_spiral(n: int, nc: int) -> i64
+
+    // ML algorithms
+    fn qai_linreg_new() -> i64
+    fn qai_linreg_free(h: i64)
+    fn qai_linreg_fit(h: i64, ds: i64)
+    fn qai_linreg_r2(h: i64, ds: i64) -> float
+    fn qai_logreg_new() -> i64
+    fn qai_logreg_free(h: i64)
+    fn qai_logreg_fit(h: i64, ds: i64)
+    fn qai_logreg_accuracy(h: i64, ds: i64) -> float
+    fn qai_knn_new(k: int) -> i64
+    fn qai_knn_free(h: i64)
+    fn qai_knn_fit(h: i64, ds: i64)
+    fn qai_knn_predict_class(h: i64, xp: i64, len: int, dim: int) -> int
+    fn qai_knn_accuracy(h: i64, ds: i64) -> float
+    fn qai_dtree_new(max_depth: int) -> i64
+    fn qai_dtree_free(h: i64)
+    fn qai_dtree_fit(h: i64, ds: i64)
+    fn qai_dtree_accuracy(h: i64, ds: i64) -> float
+    fn qai_rf_new(n_trees: int, max_depth: int) -> i64
+    fn qai_rf_free(h: i64)
+    fn qai_rf_fit(h: i64, ds: i64)
+    fn qai_rf_accuracy(h: i64, ds: i64) -> float
+    fn qai_kmeans_new(k: int) -> i64
+    fn qai_kmeans_free(h: i64)
+    fn qai_kmeans_fit(h: i64, ds: i64)
+    fn qai_kmeans_predict(h: i64, xp: i64, len: int, dim: int) -> int
+    fn qai_kmeans_inertia(h: i64, ds: i64) -> float
+    fn qai_pca_new(n: int) -> i64
+    fn qai_pca_free(h: i64)
+    fn qai_pca_fit_transform(h: i64, ds: i64) -> i64
+    fn qai_nb_new() -> i64
+    fn qai_nb_free(h: i64)
+    fn qai_nb_fit(h: i64, ds: i64)
+    fn qai_nb_accuracy(h: i64, ds: i64) -> float
+    fn qai_gbm_new(n: int, lr: float, depth: int) -> i64
+    fn qai_gbm_free(h: i64)
+    fn qai_gbm_fit(h: i64, ds: i64)
+    fn qai_gbm_accuracy(h: i64, ds: i64) -> float
+
+    // Advanced: VAE, GAN, RL
+    fn qai_vae_new(input_dim: int, hidden_dim: int, latent_dim: int) -> i64
+    fn qai_vae_free(h: i64)
+    fn qai_vae_sample(h: i64, n: int) -> i64
+    fn qai_gan_new(latent: int, output: int, hidden: int) -> i64
+    fn qai_gan_free(h: i64)
+    fn qai_gan_generate(h: i64, n: int) -> i64
+    fn qai_gan_summary(h: i64)
+    fn qai_ql_new(states: int, actions: int) -> i64
+    fn qai_ql_free(h: i64)
+    fn qai_ql_act(h: i64, sp: i64, sl: int) -> int
+    fn qai_ql_replay(h: i64, batch_size: int)
+
+    // Anomaly detection
+    fn qai_anomaly_new(dim: int) -> i64
+    fn qai_anomaly_free(h: i64)
+    fn qai_anomaly_train(h: i64, ds: i64, epochs: int)
+    fn qai_anomaly_score(h: i64, ds: i64) -> float
+    fn qai_anomaly_is_anomaly(h: i64, ds: i64) -> int
+
+    // AutoML
+    fn qai_automl_new(trials: int) -> i64
+    fn qai_automl_free(h: i64)
+    fn qai_automl_fit(h: i64, ds: i64)
+    fn qai_tune(ds: i64, trials: int) -> float
+
+    // Pretrained models
+    fn qai_resnet50(n_classes: int) -> i64
+    fn qai_bert_tiny() -> i64
+    fn qai_gpt2_mini() -> i64
+    fn qai_efficientnet(n_classes: int) -> i64
+    fn qai_yolov8() -> i64
+
+    // Benchmarks
+    fn qai_benchmark_run(h: i64, train_ds: i64, test_ds: i64, n_classes: int) -> i64
+    fn qai_benchmark_free(h: i64)
+    fn qai_benchmark_train_acc(h: i64) -> float
+    fn qai_benchmark_test_acc(h: i64) -> float
+    fn qai_benchmark_inference_ms(h: i64) -> float
+    fn qai_benchmark_throughput(h: i64) -> float
+    fn qai_benchmark_train_time(h: i64) -> float
+    fn qai_benchmark_print(h: i64)
+    fn qai_benchmark_summary(h: i64)
+
+    // AI Assistant
+    fn qai_assistant_suggest(problem: string)
+    fn qai_assistant_guide()
+    fn qai_assistant_explain(metric: string, val: float)
+    fn qai_assistant_analyze(report: i64)
+
+    // Experiment tracking
+    fn qai_experiment_new(name: string) -> i64
+    fn qai_experiment_free(h: i64)
+    fn qai_experiment_log(h: i64, key: string, val: float)
+    fn qai_experiment_finish(h: i64)
+
+    // Cross-validation
+    fn qai_crossval_run(ds: i64, task: string, epochs: int, folds: int) -> float
+
+    // DataPipeline
+    fn qai_pipeline_load(source: string) -> i64
+    fn qai_pipeline_free(h: i64)
+    fn qai_pipeline_info(h: i64)
+    fn qai_pipeline_to_dataset(h: i64) -> i64
+
+    // Quick train
+    fn qai_quick_train(task: string, ds_name: string, epochs: int) -> i64
+
+    // Utility
+    fn qai_banner()
+}
+
+// ── Float buffer helpers ────────────────────────────────────────────
+fn buf_alloc(n: int) -> i64 { return q_alloc(n * 8) }
+fn buf_free(h: i64) { q_free(h) }
+fn buf_set(h: i64, i: int, v: float) { q_write_f64(h, i, v) }
+fn buf_get(h: i64, i: int) -> float { return q_read_f64(h, i) }
+
+// ── Banner ─────────────────────────────────────────────────────────
+fn banner() { qai_banner() }
+
+// ── Tensor operations ──────────────────────────────────────────────
+fn tensor_free(h: i64) { qai_tensor_free(h) }
+fn tensor_len(h: i64) -> int { return qai_tensor_len(h) }
+fn tensor_get(h: i64, i: int) -> float { return qai_tensor_get(h, i) }
+fn tensor_set(h: i64, i: int, v: float) { qai_tensor_set(h, i, v) }
+fn tensor_mean(h: i64) -> float { return qai_tensor_mean(h) }
+fn tensor_std(h: i64) -> float { return qai_tensor_std(h) }
+fn tensor_max(h: i64) -> float { return qai_tensor_max(h) }
+fn tensor_min(h: i64) -> float { return qai_tensor_min(h) }
+fn tensor_argmax(h: i64) -> int { return qai_tensor_argmax(h) }
+fn tensor_shape_rows(h: i64) -> int { return qai_tensor_dim(h, 0) }
+fn tensor_shape_cols(h: i64) -> int { return qai_tensor_dim(h, 1) }
+fn tensor_print(h: i64) { qai_tensor_print(h) }
+
+// ── Sequential model ───────────────────────────────────────────────
+
+fn seq_new() -> i64 { return qai_seq_new() }
+fn seq_free(h: i64) { qai_seq_free(h) }
+fn seq_dense(h: i64, in_f: int, out_f: int, activation: string) { qai_seq_dense(h, in_f, out_f, activation) }
+fn seq_batchnorm(h: i64, features: int) { qai_seq_batchnorm(h, features) }
+fn seq_layernorm(h: i64, features: int) { qai_seq_layernorm(h, features) }
+fn seq_dropout(h: i64, rate: float) { qai_seq_dropout(h, rate) }
+fn seq_embedding(h: i64, vocab_size: int, embed_dim: int) { qai_seq_embedding(h, vocab_size, embed_dim) }
+fn seq_compile(h: i64, optimizer: string, loss: string, lr: float) { qai_seq_compile(h, optimizer, loss, lr) }
+fn seq_summary(h: i64) { qai_seq_summary(h) }
+fn seq_fit(h: i64, ds: i64, epochs: int, batch_size: int) { qai_seq_fit(h, ds, epochs, batch_size, 1) }
+fn seq_fit_quiet(h: i64, ds: i64, epochs: int, batch_size: int) { qai_seq_fit(h, ds, epochs, batch_size, 0) }
+fn seq_accuracy(h: i64, ds: i64) -> float { return qai_seq_accuracy(h, ds) }
+fn seq_predict_class(h: i64, x_buf: i64, n_features: int) -> int { return qai_seq_predict_class(h, x_buf, n_features) }
+fn seq_predict_one(h: i64, x_buf: i64, n_features: int) -> i64 { return qai_seq_predict_one(h, x_buf, n_features) }
+fn seq_save(h: i64, path: string) { qai_seq_save(h, path) }
+fn seq_load(h: i64, path: string) -> bool { return qai_seq_load(h, path) != 0 }
+
+// ── High-level Model ───────────────────────────────────────────────
+
+// Create pre-configured model by task:
+//   "classifier"  - multi-class neural network
+//   "regressor"   - regression network
+//   "binary"      - binary classification
+//   "nlp"         - text classification
+//   "autoencoder" - dimensionality reduction
+//   "timeseries"  - sequence prediction
+fn create(task: string) -> i64 { return qai_model_create(task) }
+
+// Load a pretrained architecture:
+//   "resnet50", "bert-tiny", "gpt2-mini", "efficientnet-b0"
+fn load(name: string) -> i64 { return qai_model_load_pretrained(name, 0) }
+fn load_pretrained(name: string) -> i64 { return qai_model_load_pretrained(name, 1) }
+
+fn model_free(h: i64) { qai_model_free(h) }
+fn model_train(h: i64, ds: i64, epochs: int) { qai_model_train(h, ds, epochs, 1) }
+fn model_train_quiet(h: i64, ds: i64, epochs: int) { qai_model_train(h, ds, epochs, 0) }
+fn model_predict_class(h: i64, x_buf: i64, n_features: int) -> int { return qai_model_predict_class(h, x_buf, n_features) }
+fn model_summary(h: i64) { qai_model_summary(h) }
+fn model_save(h: i64, path: string) { qai_model_save(h, path) }
+fn model_plot_history(h: i64) { qai_model_plot_history(h) }
+
+// ── Dataset ────────────────────────────────────────────────────────
+
+fn dataset_free(h: i64) { qai_ds_free(h) }
+fn dataset_n_samples(h: i64) -> int { return qai_ds_n_samples(h) }
+fn dataset_n_features(h: i64) -> int { return qai_ds_n_features(h) }
+fn dataset_n_classes(h: i64) -> int { return qai_ds_n_classes(h) }
+fn dataset_x(h: i64) -> i64 { return qai_ds_x(h) }
+fn dataset_y(h: i64) -> i64 { return qai_ds_y(h) }
+fn dataset_normalize(h: i64) { qai_ds_normalize(h) }
+fn dataset_shuffle(h: i64) { qai_ds_shuffle(h) }
+fn dataset_info(h: i64) { qai_ds_info(h) }
+fn dataset_train_split(h: i64, test_ratio: float) -> i64 { return qai_ds_split_train(h, test_ratio) }
+fn dataset_test_split(h: i64, test_ratio: float) -> i64 { return qai_ds_split_test(h, test_ratio) }
+
+// ── Synthetic datasets ─────────────────────────────────────────────
+
+fn make_xor(n_samples: int) -> i64 { return qai_make_xor(n_samples) }
+fn make_sine(n_samples: int) -> i64 { return qai_make_sine(n_samples) }
+fn make_classification(n_samples: int, n_features: int, n_classes: int) -> i64 { return qai_make_classification(n_samples, n_features, n_classes) }
+fn make_moons(n_samples: int, noise: float) -> i64 { return qai_make_moons(n_samples, noise) }
+fn make_circles(n_samples: int, noise: float) -> i64 { return qai_make_circles(n_samples, noise) }
+fn make_regression(n_samples: int, n_features: int, noise: float) -> i64 { return qai_make_regression(n_samples, n_features, noise) }
+fn make_iris(n_samples: int) -> i64 { return qai_make_iris(n_samples) }
+fn make_spiral(n_samples: int, n_classes: int) -> i64 { return qai_make_spiral(n_samples, n_classes) }
+
+// ── ML algorithms ──────────────────────────────────────────────────
+
+fn linreg_new() -> i64 { return qai_linreg_new() }
+fn linreg_free(h: i64) { qai_linreg_free(h) }
+fn linreg_fit(h: i64, ds: i64) { qai_linreg_fit(h, ds) }
+fn linreg_r2(h: i64, ds: i64) -> float { return qai_linreg_r2(h, ds) }
+
+fn logreg_new() -> i64 { return qai_logreg_new() }
+fn logreg_free(h: i64) { qai_logreg_free(h) }
+fn logreg_fit(h: i64, ds: i64) { qai_logreg_fit(h, ds) }
+fn logreg_accuracy(h: i64, ds: i64) -> float { return qai_logreg_accuracy(h, ds) }
+
+fn knn_new(k: int) -> i64 { return qai_knn_new(k) }
+fn knn_free(h: i64) { qai_knn_free(h) }
+fn knn_fit(h: i64, ds: i64) { qai_knn_fit(h, ds) }
+fn knn_predict(h: i64, x_buf: i64, n: int, dim: int) -> int { return qai_knn_predict_class(h, x_buf, n, dim) }
+fn knn_accuracy(h: i64, ds: i64) -> float { return qai_knn_accuracy(h, ds) }
+
+fn dtree_new(max_depth: int) -> i64 { return qai_dtree_new(max_depth) }
+fn dtree_free(h: i64) { qai_dtree_free(h) }
+fn dtree_fit(h: i64, ds: i64) { qai_dtree_fit(h, ds) }
+fn dtree_accuracy(h: i64, ds: i64) -> float { return qai_dtree_accuracy(h, ds) }
+
+fn rf_new(n_trees: int, max_depth: int) -> i64 { return qai_rf_new(n_trees, max_depth) }
+fn rf_free(h: i64) { qai_rf_free(h) }
+fn rf_fit(h: i64, ds: i64) { qai_rf_fit(h, ds) }
+fn rf_accuracy(h: i64, ds: i64) -> float { return qai_rf_accuracy(h, ds) }
+
+fn kmeans_new(k: int) -> i64 { return qai_kmeans_new(k) }
+fn kmeans_free(h: i64) { qai_kmeans_free(h) }
+fn kmeans_fit(h: i64, ds: i64) { qai_kmeans_fit(h, ds) }
+fn kmeans_predict(h: i64, x_buf: i64, n: int, dim: int) -> int { return qai_kmeans_predict(h, x_buf, n, dim) }
+fn kmeans_inertia(h: i64, ds: i64) -> float { return qai_kmeans_inertia(h, ds) }
+
+fn pca_new(n_components: int) -> i64 { return qai_pca_new(n_components) }
+fn pca_free(h: i64) { qai_pca_free(h) }
+fn pca_fit_transform(h: i64, ds: i64) -> i64 { return qai_pca_fit_transform(h, ds) }
+
+fn nb_new() -> i64 { return qai_nb_new() }
+fn nb_free(h: i64) { qai_nb_free(h) }
+fn nb_fit(h: i64, ds: i64) { qai_nb_fit(h, ds) }
+fn nb_accuracy(h: i64, ds: i64) -> float { return qai_nb_accuracy(h, ds) }
+
+fn gbm_new(n_estimators: int, lr: float, max_depth: int) -> i64 { return qai_gbm_new(n_estimators, lr, max_depth) }
+fn gbm_free(h: i64) { qai_gbm_free(h) }
+fn gbm_fit(h: i64, ds: i64) { qai_gbm_fit(h, ds) }
+fn gbm_accuracy(h: i64, ds: i64) -> float { return qai_gbm_accuracy(h, ds) }
+
+// ── Advanced models ────────────────────────────────────────────────
+
+fn vae_new(input_dim: int, hidden_dim: int, latent_dim: int) -> i64 { return qai_vae_new(input_dim, hidden_dim, latent_dim) }
+fn vae_free(h: i64) { qai_vae_free(h) }
+fn vae_sample(h: i64, n: int) -> i64 { return qai_vae_sample(h, n) }
+
+fn gan_new(latent_dim: int, output_dim: int, hidden_dim: int) -> i64 { return qai_gan_new(latent_dim, output_dim, hidden_dim) }
+fn gan_free(h: i64) { qai_gan_free(h) }
+fn gan_generate(h: i64, n: int) -> i64 { return qai_gan_generate(h, n) }
+fn gan_summary(h: i64) { qai_gan_summary(h) }
+
+fn ql_new(state_size: int, action_size: int) -> i64 { return qai_ql_new(state_size, action_size) }
+fn ql_free(h: i64) { qai_ql_free(h) }
+fn ql_act(h: i64, state_buf: i64, state_len: int) -> int { return qai_ql_act(h, state_buf, state_len) }
+fn ql_replay(h: i64, batch_size: int) { qai_ql_replay(h, batch_size) }
+
+// ── Anomaly detection ──────────────────────────────────────────────
+
+fn anomaly_new(input_dim: int) -> i64 { return qai_anomaly_new(input_dim) }
+fn anomaly_free(h: i64) { qai_anomaly_free(h) }
+fn anomaly_train(h: i64, ds: i64, epochs: int) { qai_anomaly_train(h, ds, epochs) }
+fn anomaly_score(h: i64, ds: i64) -> float { return qai_anomaly_score(h, ds) }
+fn anomaly_is_anomaly(h: i64, ds: i64) -> bool { return qai_anomaly_is_anomaly(h, ds) != 0 }
+
+// ── AutoML ─────────────────────────────────────────────────────────
+
+fn automl_new(n_trials: int) -> i64 { return qai_automl_new(n_trials) }
+fn automl_free(h: i64) { qai_automl_free(h) }
+fn automl_fit(h: i64, ds: i64) { qai_automl_fit(h, ds) }
+fn tune(ds: i64, n_trials: int) -> float { return qai_tune(ds, n_trials) }
+
+// ── Pretrained models ──────────────────────────────────────────────
+
+fn resnet50(n_classes: int) -> i64 { return qai_resnet50(n_classes) }
+// Pretrained models return Sequential handles — use seq_free() not model_free()
+fn bert_tiny() -> i64 { return qai_bert_tiny() }
+fn gpt2_mini() -> i64 { return qai_gpt2_mini() }
+fn efficientnet(n_classes: int) -> i64 { return qai_efficientnet(n_classes) }
+fn yolov8() -> i64 { return qai_yolov8() }
+
+// ── Benchmarks ─────────────────────────────────────────────────────
+
+fn benchmark_run(model: i64, train_ds: i64, test_ds: i64, n_classes: int) -> i64 {
+    return qai_benchmark_run(model, train_ds, test_ds, n_classes)
+}
+fn benchmark_free(h: i64) { qai_benchmark_free(h) }
+fn benchmark_train_acc(h: i64) -> float { return qai_benchmark_train_acc(h) }
+fn benchmark_test_acc(h: i64) -> float { return qai_benchmark_test_acc(h) }
+fn benchmark_inference_ms(h: i64) -> float { return qai_benchmark_inference_ms(h) }
+fn benchmark_throughput(h: i64) -> float { return qai_benchmark_throughput(h) }
+fn benchmark_train_time(h: i64) -> float { return qai_benchmark_train_time(h) }
+fn benchmark_print(h: i64) { qai_benchmark_print(h) }
+fn benchmark_summary(h: i64) { qai_benchmark_summary(h) }
+
+// ── AI Assistant ───────────────────────────────────────────────────
+
+fn assistant_suggest(problem: string) { qai_assistant_suggest(problem) }
+fn assistant_guide() { qai_assistant_guide() }
+fn assistant_explain(metric: string, value: float) { qai_assistant_explain(metric, value) }
+fn assistant_analyze(benchmark: i64) { qai_assistant_analyze(benchmark) }
+
+// ── Experiment tracking ────────────────────────────────────────────
+
+fn experiment_new(name: string) -> i64 { return qai_experiment_new(name) }
+fn experiment_free(h: i64) { qai_experiment_free(h) }
+fn experiment_log(h: i64, key: string, val: float) { qai_experiment_log(h, key, val) }
+fn experiment_finish(h: i64) { qai_experiment_finish(h) }
+
+// ── Cross-validation ───────────────────────────────────────────────
+
+fn crossval(ds: i64, task: string, epochs: int, k_folds: int) -> float {
+    return qai_crossval_run(ds, task, epochs, k_folds)
+}
+
+// ── DataPipeline ───────────────────────────────────────────────────
+
+fn pipeline_load(source: string) -> i64 { return qai_pipeline_load(source) }
+fn pipeline_free(h: i64) { qai_pipeline_free(h) }
+fn pipeline_info(h: i64) { qai_pipeline_info(h) }
+fn pipeline_to_dataset(h: i64) -> i64 { return qai_pipeline_to_dataset(h) }
+
+// ── Quick shortcuts ────────────────────────────────────────────────
+
+fn quick_train(task: string, dataset_name: string, epochs: int) -> i64 {
+    return qai_quick_train(task, dataset_name, epochs)
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// QuantumAI 2026 Extensions
+// LoRA, DPO, MoE, Flash Attention, RoPE, KV Cache, RAG,
+// Diffusion, Mamba/SSM, Quantization, CLIP, Agents, Scaling
+// ═══════════════════════════════════════════════════════════════════
+
+extern "C" {
+    // LoRA
+    fn qai_lora_new(seq: i64, rank: int, alpha: float) -> i64
+    fn qai_lora_free(h: i64)
+    fn qai_lora_summary(h: i64)
+    fn qai_lora_train(h: i64, ds: i64, epochs: int, lr: float, verbose: int)
+    fn qai_lora_n_params(h: i64) -> int
+    // DPO
+    fn qai_dpo_new(seq: i64, beta: float, lr: float) -> i64
+    fn qai_dpo_free(h: i64)
+    fn qai_dpo_train(h: i64, preferred: i64, rejected: i64, epochs: int, verbose: int)
+    fn qai_dpo_summary(h: i64)
+    // MoE Transformer
+    fn qai_moe_new(layers: int, d_model: int, heads: int, experts: int, top_k: int) -> i64
+    fn qai_moe_free(h: i64)
+    fn qai_moe_summary(h: i64)
+    fn qai_moe_total_params(h: i64) -> int
+    fn qai_moe_forward(h: i64, ds: i64) -> i64
+    // Flash Attention
+    fn qai_flash_new(heads: int, head_dim: int) -> i64
+    fn qai_flash_free(h: i64)
+    fn qai_flash_summary(h: i64)
+    fn qai_flash_forward(h: i64, q: i64, k: i64, v: i64) -> i64
+    // RoPE
+    fn qai_rope_new(dim: int, max_seq: int) -> i64
+    fn qai_rope_free(h: i64)
+    fn qai_rope_apply(h: i64, t: i64) -> i64
+    // KV Cache
+    fn qai_kvcache_new(max_seq: int, heads: int, head_dim: int) -> i64
+    fn qai_kvcache_free(h: i64)
+    fn qai_kvcache_update(h: i64, k: i64, v: i64)
+    fn qai_kvcache_len(h: i64) -> int
+    fn qai_kvcache_memory_mb(h: i64) -> float
+    fn qai_kvcache_summary(h: i64)
+    // RAG
+    fn qai_rag_new(embed_dim: int, top_k: int) -> i64
+    fn qai_rag_free(h: i64)
+    fn qai_rag_add(h: i64, text: string, emb: i64, emb_len: int)
+    fn qai_rag_n_docs(h: i64) -> int
+    fn qai_rag_summary(h: i64)
+    fn qai_rag_top_score(h: i64, qemb: i64, qlen: int) -> float
+    // Diffusion
+    fn qai_diffusion_new(data_dim: int, hidden: int, steps: int) -> i64
+    fn qai_diffusion_free(h: i64)
+    fn qai_diffusion_summary(h: i64)
+    fn qai_diffusion_sample(h: i64, n: int) -> i64
+    fn qai_diffusion_steps(h: i64) -> int
+    // Mamba / SSM
+    fn qai_mamba_new(d_model: int, d_state: int) -> i64
+    fn qai_mamba_free(h: i64)
+    fn qai_mamba_summary(h: i64)
+    fn qai_mamba_n_params(h: i64) -> int
+    fn qai_mamba_forward(h: i64, ds: i64) -> i64
+    // Quantization
+    fn qai_quantize(seq: i64) -> float
+    fn qai_quantize_report(seq: i64)
+    // CLIP / Multi-Modal
+    fn qai_clip_new(vision_dim: int, text_dim: int, embed_dim: int) -> i64
+    fn qai_clip_free(h: i64)
+    fn qai_clip_summary(h: i64)
+    fn qai_clip_encode_vision(h: i64, ds: i64) -> i64
+    fn qai_clip_encode_text(h: i64, ds: i64) -> i64
+    fn qai_clip_n_params(h: i64) -> int
+    // Agent
+    fn qai_agent_new(name: string) -> i64
+    fn qai_agent_free(h: i64)
+    fn qai_agent_add_tool(h: i64, tool: string)
+    fn qai_agent_remember(h: i64, fact: string)
+    fn qai_agent_run(h: i64, task: string) -> int
+    fn qai_agent_summary(h: i64)
+    // Scaling
+    fn qai_scale(task: string, params_billions: float) -> i64
+}
+
+// ── LoRA fine-tuning ───────────────────────────────────────────────
+// Wrap a base model with low-rank adapters for parameter-efficient
+// fine-tuning. Only rank*in + rank*out params are trained per layer.
+fn lora_new(base_model: i64, rank: int, alpha: float) -> i64 {
+    return qai_lora_new(base_model, rank, alpha)
+}
+fn lora_free(h: i64) { qai_lora_free(h) }
+fn lora_summary(h: i64) { qai_lora_summary(h) }
+fn lora_train(h: i64, ds: i64, epochs: int, lr: float) { qai_lora_train(h, ds, epochs, lr, 1) }
+fn lora_n_params(h: i64) -> int { return qai_lora_n_params(h) }
+
+// ── DPO: Direct Preference Optimization ───────────────────────────
+// Train on preference pairs (preferred vs rejected responses).
+// The 2024-2026 replacement for RLHF — no reward model needed.
+fn dpo_new(base_model: i64, beta: float, lr: float) -> i64 {
+    return qai_dpo_new(base_model, beta, lr)
+}
+fn dpo_free(h: i64) { qai_dpo_free(h) }
+fn dpo_train(h: i64, preferred_ds: i64, rejected_ds: i64, epochs: int) {
+    qai_dpo_train(h, preferred_ds, rejected_ds, epochs, 1)
+}
+fn dpo_summary(h: i64) { qai_dpo_summary(h) }
+
+// ── Mixture of Experts Transformer ────────────────────────────────
+// Architecture behind GPT-4, Mixtral, Gemini.
+// Each token routes to top_k of n_experts — large capacity, lower
+// compute cost per token than dense transformers.
+fn moe_new(n_layers: int, d_model: int, n_heads: int, n_experts: int, top_k: int) -> i64 {
+    return qai_moe_new(n_layers, d_model, n_heads, n_experts, top_k)
+}
+fn moe_free(h: i64) { qai_moe_free(h) }
+fn moe_summary(h: i64) { qai_moe_summary(h) }
+fn moe_total_params(h: i64) -> int { return qai_moe_total_params(h) }
+fn moe_forward(h: i64, ds: i64) -> i64 { return qai_moe_forward(h, ds) }
+
+// ── Flash Attention ────────────────────────────────────────────────
+// O(N) memory vs O(N²) for standard attention. Essential for long
+// context windows (32K, 128K, 1M tokens).
+fn flash_attn_new(n_heads: int, head_dim: int) -> i64 {
+    return qai_flash_new(n_heads, head_dim)
+}
+fn flash_attn_free(h: i64) { qai_flash_free(h) }
+fn flash_attn_summary(h: i64) { qai_flash_summary(h) }
+fn flash_attn_forward(h: i64, q: i64, k: i64, v: i64) -> i64 {
+    return qai_flash_forward(h, q, k, v)
+}
+
+// ── Rotary Position Embeddings (RoPE) ──────────────────────────────
+// Used in LLaMA, Mistral, Gemma, Phi — better length generalization
+// than learned absolute position embeddings.
+fn rope_new(dim: int, max_seq_len: int) -> i64 {
+    return qai_rope_new(dim, max_seq_len)
+}
+fn rope_free(h: i64) { qai_rope_free(h) }
+fn rope_apply(h: i64, tensor: i64) -> i64 { return qai_rope_apply(h, tensor) }
+
+// ── KV Cache ───────────────────────────────────────────────────────
+// Essential for efficient LLM inference — avoid recomputing attention
+// for all previous tokens on every new generation step.
+fn kvcache_new(max_seq_len: int, n_heads: int, head_dim: int) -> i64 {
+    return qai_kvcache_new(max_seq_len, n_heads, head_dim)
+}
+fn kvcache_free(h: i64) { qai_kvcache_free(h) }
+fn kvcache_update(h: i64, k: i64, v: i64) { qai_kvcache_update(h, k, v) }
+fn kvcache_len(h: i64) -> int { return qai_kvcache_len(h) }
+fn kvcache_memory_mb(h: i64) -> float { return qai_kvcache_memory_mb(h) }
+fn kvcache_summary(h: i64) { qai_kvcache_summary(h) }
+
+// ── RAG: Retrieval-Augmented Generation ────────────────────────────
+// The dominant 2024-2026 LLM deployment pattern.
+// Retrieves relevant context from a vector store at query time.
+fn rag_new(embed_dim: int, top_k: int) -> i64 {
+    return qai_rag_new(embed_dim, top_k)
+}
+fn rag_free(h: i64) { qai_rag_free(h) }
+fn rag_add_doc(h: i64, text: string, emb_buf: i64, embed_dim: int) {
+    qai_rag_add(h, text, emb_buf, embed_dim)
+}
+fn rag_n_docs(h: i64) -> int { return qai_rag_n_docs(h) }
+fn rag_summary(h: i64) { qai_rag_summary(h) }
+fn rag_retrieve_score(h: i64, query_emb_buf: i64, embed_dim: int) -> float {
+    return qai_rag_top_score(h, query_emb_buf, embed_dim)
+}
+
+// ── Diffusion Model ────────────────────────────────────────────────
+// Architecture behind Stable Diffusion, DALL-E 3, Sora.
+// Learns to denoise progressively via a learned score function.
+fn diffusion_new(data_dim: int, hidden_dim: int, n_steps: int) -> i64 {
+    return qai_diffusion_new(data_dim, hidden_dim, n_steps)
+}
+fn diffusion_free(h: i64) { qai_diffusion_free(h) }
+fn diffusion_summary(h: i64) { qai_diffusion_summary(h) }
+fn diffusion_sample(h: i64, n_samples: int) -> i64 {
+    return qai_diffusion_sample(h, n_samples)
+}
+fn diffusion_steps(h: i64) -> int { return qai_diffusion_steps(h) }
+
+// ── Mamba / SSM: State Space Model ────────────────────────────────
+// O(N) vs O(N²) for attention. Excels at very long sequences.
+// Used in Mamba-1, Mamba-2, Jamba (hybrid with attention).
+fn mamba_new(d_model: int, d_state: int) -> i64 {
+    return qai_mamba_new(d_model, d_state)
+}
+fn mamba_free(h: i64) { qai_mamba_free(h) }
+fn mamba_summary(h: i64) { qai_mamba_summary(h) }
+fn mamba_n_params(h: i64) -> int { return qai_mamba_n_params(h) }
+fn mamba_forward(h: i64, ds: i64) -> i64 { return qai_mamba_forward(h, ds) }
+
+// ── Model Quantization ─────────────────────────────────────────────
+// int8 quantization: 8x smaller, 2-4x faster inference.
+fn quantize(model: i64) -> float { return qai_quantize(model) }
+fn quantize_report(model: i64) { qai_quantize_report(model) }
+
+// ── CLIP: Multi-Modal Vision+Language ─────────────────────────────
+// Encodes images and text into a shared embedding space.
+// Foundation for GPT-4V, LLaVA, Flamingo, Gemini.
+fn clip_new(vision_dim: int, text_dim: int, embed_dim: int) -> i64 {
+    return qai_clip_new(vision_dim, text_dim, embed_dim)
+}
+fn clip_free(h: i64) { qai_clip_free(h) }
+fn clip_summary(h: i64) { qai_clip_summary(h) }
+fn clip_encode_vision(h: i64, ds: i64) -> i64 { return qai_clip_encode_vision(h, ds) }
+fn clip_encode_text(h: i64, ds: i64) -> i64 { return qai_clip_encode_text(h, ds) }
+fn clip_n_params(h: i64) -> int { return qai_clip_n_params(h) }
+
+// ── AI Agent ───────────────────────────────────────────────────────
+// ReAct-style agent: reason + act in a loop using tools.
+// The dominant 2025-2026 deployment pattern for complex tasks.
+fn agent_new(name: string) -> i64 { return qai_agent_new(name) }
+fn agent_free(h: i64) { qai_agent_free(h) }
+fn agent_add_tool(h: i64, tool_name: string) { qai_agent_add_tool(h, tool_name) }
+fn agent_remember(h: i64, fact: string) { qai_agent_remember(h, fact) }
+fn agent_run(h: i64, task: string) -> int { return qai_agent_run(h, task) }
+fn agent_summary(h: i64) { qai_agent_summary(h) }
+
+// ── Trillion-Parameter Scaling ─────────────────────────────────────
+// Define arbitrarily large model architectures.
+// Actual training at this scale requires distributed infrastructure,
+// but Quantum can define, describe, and run inference on the architecture.
+fn scale(task: string, params_billions: float) -> i64 {
+    return qai_scale(task, params_billions)
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Hardware Detection, Brain Viewer, Lazy Loading, Trillion Params
+// ═══════════════════════════════════════════════════════════════════
+
+extern "C" {
+    // Hardware
+    fn qai_hw_detect() -> i64
+    fn qai_hw_free(h: i64)
+    fn qai_hw_print(h: i64)
+    fn qai_hw_has_cuda(h: i64) -> int
+    fn qai_hw_ram_mb(h: i64) -> float
+    fn qai_hw_can_fit(h: i64, mb: float) -> int
+    fn qai_hw_max_params(h: i64) -> int
+    fn qai_hw_batch(h: i64) -> int
+    fn qai_hw_advise(h: i64, n_params: int, task: string)
+    // Weight downloader
+    fn qai_downloader_new(cache_dir: string) -> i64
+    fn qai_downloader_free(h: i64)
+    fn qai_downloader_get(h: i64, model_name: string) -> int
+    fn qai_downloader_catalog()
+    // Semantic brain viewer
+    fn qai_semantic_viewer_new(dim: int) -> i64
+    fn qai_semantic_viewer_free(h: i64)
+    fn qai_semantic_viewer_update(h: i64, act: i64, len: int, token: string)
+    fn qai_semantic_viewer_explain_vec(word: string, vec: i64, len: int)
+    fn qai_show_vector(word: string, vec: i64, len: int)
+    // Model inspector
+    fn qai_inspector_new(seq: i64) -> i64
+    fn qai_inspector_free(h: i64)
+    fn qai_inspector_forward(h: i64, ds: i64) -> i64
+    fn qai_inspector_print_brain(h: i64)
+    fn qai_inspector_explain_pred(h: i64, out: i64)
+    // Brain viewer
+    fn qai_brain_viewer_new(layers: int, d_model: int) -> i64
+    fn qai_brain_viewer_free(h: i64)
+    fn qai_brain_viewer_update(h: i64, act: i64, len: int, token: string)
+    // Modular model
+    fn qai_modular_new(name: string) -> i64
+    fn qai_modular_free(h: i64)
+    fn qai_modular_add_block(h: i64, block_id: int, name: string, in_dim: int, out_dim: int, hidden: int)
+    fn qai_modular_pretrain(h: i64, block_id: int, ds: i64, epochs: int)
+    fn qai_modular_freeze(h: i64, block_id: int)
+    fn qai_modular_fine_tune(h: i64, ds: i64, epochs: int)
+    fn qai_modular_summary(h: i64)
+    fn qai_modular_total_params(h: i64) -> int
+    // Lazy model
+    fn qai_lazy_new(name: string, in_dim: int, out_dim: int, n_shards: int, top_k: int) -> i64
+    fn qai_lazy_free(h: i64)
+    fn qai_lazy_summary(h: i64)
+    fn qai_lazy_forward(h: i64, x_ptr: i64, x_len: int) -> i64
+    fn qai_lazy_ram_saved(h: i64) -> float
+    fn qai_lazy_loaded_mb(h: i64) -> float
+    fn qai_lazy_total_mb(h: i64) -> float
+    // Predictive loader
+    fn qai_predictive_new(lazy: i64, window: int) -> i64
+    fn qai_predictive_free(h: i64)
+    fn qai_predictive_forward(h: i64, x_ptr: i64, x_len: int) -> i64
+    fn qai_predictive_summary(h: i64)
+    fn qai_predictive_accuracy(h: i64) -> float
+    // Trillion-param
+    fn qai_trillion_new(name: string, params_billions: float, arch: string) -> i64
+    fn qai_trillion_free(h: i64)
+    fn qai_trillion_generate(h: i64, prompt: string) -> i64
+    fn qai_trillion_n_params(h: i64) -> int
+    fn qai_trillion_ram_needed(h: i64) -> float
+    // Embedding viewer
+    fn qai_embedding_view(word: string, ds: i64)
+    fn qai_downloader_catalog()
+}
+
+// ── Hardware detection ─────────────────────────────────────────────
+fn hw_detect() -> i64 { return qai_hw_detect() }
+fn hw_free(h: i64) { qai_hw_free(h) }
+fn hw_print(h: i64) { qai_hw_print(h) }
+fn hw_has_cuda(h: i64) -> bool { return qai_hw_has_cuda(h) != 0 }
+fn hw_ram_mb(h: i64) -> float { return qai_hw_ram_mb(h) }
+fn hw_can_fit(h: i64, model_mb: float) -> bool { return qai_hw_can_fit(h, model_mb) != 0 }
+fn hw_max_params(h: i64) -> int { return qai_hw_max_params(h) }
+fn hw_batch(h: i64) -> int { return qai_hw_batch(h) }
+fn hw_advise(h: i64, n_params: int, task: string) { qai_hw_advise(h, n_params, task) }
+
+// ── Weight downloader ──────────────────────────────────────────────
+fn downloader_new(cache_dir: string) -> i64 { return qai_downloader_new(cache_dir) }
+fn downloader_free(h: i64) { qai_downloader_free(h) }
+fn downloader_get(h: i64, model_name: string) -> bool { return qai_downloader_get(h, model_name) != 0 }
+fn downloader_catalog() { qai_downloader_catalog() }
+
+// ── Semantic brain viewer ──────────────────────────────────────────
+fn semantic_viewer_new(embed_dim: int) -> i64 { return qai_semantic_viewer_new(embed_dim) }
+fn semantic_viewer_free(h: i64) { qai_semantic_viewer_free(h) }
+fn semantic_viewer_update(h: i64, act_buf: i64, len: int, token: string) {
+    qai_semantic_viewer_update(h, act_buf, len, token)
+}
+fn show_vector(word: string, vec_buf: i64, len: int) { qai_show_vector(word, vec_buf, len) }
+fn explain_embedding(word: string, vec_buf: i64, len: int) {
+    qai_semantic_viewer_explain_vec(word, vec_buf, len)
+}
+
+// ── Model inspector ────────────────────────────────────────────────
+fn inspector_new(seq_model: i64) -> i64 { return qai_inspector_new(seq_model) }
+fn inspector_free(h: i64) { qai_inspector_free(h) }
+fn inspector_forward(h: i64, ds: i64) -> i64 { return qai_inspector_forward(h, ds) }
+fn inspector_print_brain(h: i64) { qai_inspector_print_brain(h) }
+fn inspector_explain_pred(h: i64, out_tensor: i64) { qai_inspector_explain_pred(h, out_tensor) }
+
+// ── Brain viewer ───────────────────────────────────────────────────
+fn brain_viewer_new(n_layers: int, d_model: int) -> i64 { return qai_brain_viewer_new(n_layers, d_model) }
+fn brain_viewer_free(h: i64) { qai_brain_viewer_free(h) }
+fn brain_viewer_update(h: i64, act_buf: i64, len: int, token: string) {
+    qai_brain_viewer_update(h, act_buf, len, token)
+}
+
+// ── Modular / pre-training ─────────────────────────────────────────
+fn modular_new(name: string) -> i64 { return qai_modular_new(name) }
+fn modular_free(h: i64) { qai_modular_free(h) }
+fn modular_add_block(h: i64, block_id: int, name: string, in_dim: int, out_dim: int, hidden: int) {
+    qai_modular_add_block(h, block_id, name, in_dim, out_dim, hidden)
+}
+fn modular_pretrain(h: i64, block_id: int, ds: i64, epochs: int) {
+    qai_modular_pretrain(h, block_id, ds, epochs)
+}
+fn modular_freeze(h: i64, block_id: int) { qai_modular_freeze(h, block_id) }
+fn modular_fine_tune(h: i64, ds: i64, epochs: int) { qai_modular_fine_tune(h, ds, epochs) }
+fn modular_summary(h: i64) { qai_modular_summary(h) }
+fn modular_total_params(h: i64) -> int { return qai_modular_total_params(h) }
+
+// ── Lazy model ─────────────────────────────────────────────────────
+fn lazy_new(name: string, in_dim: int, out_dim: int, n_shards: int, top_k: int) -> i64 {
+    return qai_lazy_new(name, in_dim, out_dim, n_shards, top_k)
+}
+fn lazy_free(h: i64) { qai_lazy_free(h) }
+fn lazy_summary(h: i64) { qai_lazy_summary(h) }
+fn lazy_forward(h: i64, x_buf: i64, x_len: int) -> i64 { return qai_lazy_forward(h, x_buf, x_len) }
+fn lazy_ram_saved(h: i64) -> float { return qai_lazy_ram_saved(h) }
+fn lazy_loaded_mb(h: i64) -> float { return qai_lazy_loaded_mb(h) }
+fn lazy_total_mb(h: i64) -> float { return qai_lazy_total_mb(h) }
+
+// ── Predictive loader ──────────────────────────────────────────────
+fn predictive_new(lazy_model: i64, window_size: int) -> i64 {
+    return qai_predictive_new(lazy_model, window_size)
+}
+fn predictive_free(h: i64) { qai_predictive_free(h) }
+fn predictive_forward(h: i64, x_buf: i64, x_len: int) -> i64 {
+    return qai_predictive_forward(h, x_buf, x_len)
+}
+fn predictive_summary(h: i64) { qai_predictive_summary(h) }
+fn predictive_accuracy(h: i64) -> float { return qai_predictive_accuracy(h) }
+
+// ── Trillion-param model ───────────────────────────────────────────
+fn trillion_new(name: string, params_billions: float, arch: string) -> i64 {
+    return qai_trillion_new(name, params_billions, arch)
+}
+fn trillion_free(h: i64) { qai_trillion_free(h) }
+fn trillion_generate(h: i64, prompt: string) { qai_trillion_generate(h, prompt) }
+fn trillion_n_params(h: i64) -> int { return qai_trillion_n_params(h) }
+fn trillion_ram_needed(h: i64) -> float { return qai_trillion_ram_needed(h) }
+
+// ── Data Cleaner, HF Streamer, Training Pipeline ───────────────────
+extern "C" {
+    fn qai_cleaner_new() -> i64
+    fn qai_cleaner_free(h: i64)
+    fn qai_cleaner_run(h: i64, ds: i64) -> i64
+    fn qai_cleaner_fill(h: i64, strategy: string)
+    fn qai_cleaner_outliers(h: i64, strategy: string, sigma: float)
+    fn qai_cleaner_no_scale(h: i64)
+    fn qai_hf_new(name: string, split: string) -> i64
+    fn qai_hf_free(h: i64)
+    fn qai_hf_connect(h: i64) -> int
+    fn qai_hf_next_batch(h: i64) -> i64
+    fn qai_hf_is_done(h: i64) -> int
+    fn qai_hf_progress(h: i64) -> float
+    fn qai_hf_summary(h: i64)
+    fn qai_hf_batch_size(h: i64, n: int)
+    fn qai_training_pipeline_new(seq: i64, viz_path: string) -> i64
+    fn qai_training_pipeline_free(h: i64)
+    fn qai_training_pipeline_fit(h: i64, train: i64, val: i64, epochs: int, batch: int, lr: float)
+    fn qai_training_pipeline_fit_streaming(h: i64, streamer: i64, ep_per_batch: int, lr: float)
+    fn qai_training_pipeline_set_cleaner(h: i64, cleaner: i64)
+    fn qai_training_pipeline_early_stop(h: i64, patience: int)
+}
+
+fn cleaner_new() -> i64 { return qai_cleaner_new() }
+fn cleaner_free(h: i64) { qai_cleaner_free(h) }
+fn cleaner_run(h: i64, ds: i64) -> i64 { return qai_cleaner_run(h, ds) }
+fn cleaner_fill(h: i64, strategy: string) { qai_cleaner_fill(h, strategy) }
+fn cleaner_outliers(h: i64, strategy: string, sigma: float) { qai_cleaner_outliers(h, strategy, sigma) }
+fn cleaner_no_scale(h: i64) { qai_cleaner_no_scale(h) }
+
+fn hf_stream(dataset_name: string, split: string) -> i64 { return qai_hf_new(dataset_name, split) }
+fn hf_free(h: i64) { qai_hf_free(h) }
+fn hf_connect(h: i64) -> bool { return qai_hf_connect(h) != 0 }
+fn hf_next_batch(h: i64) -> i64 { return qai_hf_next_batch(h) }
+fn hf_is_done(h: i64) -> bool { return qai_hf_is_done(h) != 0 }
+fn hf_progress(h: i64) -> float { return qai_hf_progress(h) }
+fn hf_summary(h: i64) { qai_hf_summary(h) }
+fn hf_batch_size(h: i64, n: int) { qai_hf_batch_size(h, n) }
+
+fn training_pipeline_new(seq: i64, viz_path: string) -> i64 { return qai_training_pipeline_new(seq, viz_path) }
+fn training_pipeline_free(h: i64) { qai_training_pipeline_free(h) }
+fn training_pipeline_fit(h: i64, train: i64, val: i64, epochs: int, batch: int, lr: float) {
+    qai_training_pipeline_fit(h, train, val, epochs, batch, lr)
+}
+fn training_pipeline_fit_streaming(h: i64, streamer: i64, ep_per_batch: int, lr: float) {
+    qai_training_pipeline_fit_streaming(h, streamer, ep_per_batch, lr)
+}
+fn training_pipeline_set_cleaner(h: i64, cleaner: i64) { qai_training_pipeline_set_cleaner(h, cleaner) }
+fn training_pipeline_early_stop(h: i64, patience: int) { qai_training_pipeline_early_stop(h, patience) }
+
+// ── Multi-Modal Output Model ────────────────────────────────────────
+extern "C" {
+    fn qai_multimodal_new(name: string, input_dim: int, d_model: int, modalities: string) -> i64
+    fn qai_multimodal_free(h: i64)
+    fn qai_multimodal_summary(h: i64)
+    fn qai_multimodal_forward(h: i64, ds: i64) -> i64
+    fn qai_multimodal_forward_text(h: i64, ds: i64) -> i64
+    fn qai_multimodal_forward_audio(h: i64, ds: i64) -> i64
+    fn qai_multimodal_forward_video(h: i64, ds: i64) -> i64
+    fn qai_multimodal_forward_image(h: i64, ds: i64) -> i64
+    fn qai_multimodal_train(h: i64, ds: i64, epochs: int, lr: float, verbose: int)
+    fn qai_multimodal_gen_audio(h: i64, ds: i64, n_frames: int) -> i64
+    fn qai_multimodal_gen_image(h: i64, ds: i64) -> i64
+    fn qai_multimodal_gen_text(h: i64, ds: i64, max_tokens: int) -> int
+    fn qai_multimodal_n_params(h: i64) -> int
+    fn qai_multimodal_n_modalities(h: i64) -> int
+}
+
+// Create a multi-modal model with any combination of output heads.
+// modalities: "text", "audio", "video", "image", or combinations
+// like "text,audio" or "text,audio,video,image"
+//
+// Example:
+//   let mm = qai.multimodal_new("MyModel", 512, 256, "text,audio,image")
+//   qai.multimodal_summary(mm)
+//   let ds = qai.make_classification(100, 512, 4)
+//   qai.multimodal_train(mm, ds, 50, 0.001)
+//   let text_out = qai.multimodal_gen_text(mm, ds, 20)
+//   let audio_out = qai.multimodal_gen_audio(mm, ds, 100)
+//   let image_out = qai.multimodal_gen_image(mm, ds)
+fn multimodal_new(name: string, input_dim: int, d_model: int, modalities: string) -> i64 {
+    return qai_multimodal_new(name, input_dim, d_model, modalities)
+}
+fn multimodal_free(h: i64) { qai_multimodal_free(h) }
+fn multimodal_summary(h: i64) { qai_multimodal_summary(h) }
+fn multimodal_n_params(h: i64) -> int { return qai_multimodal_n_params(h) }
+fn multimodal_n_modalities(h: i64) -> int { return qai_multimodal_n_modalities(h) }
+
+// Forward pass — returns shared representation tensor
+fn multimodal_forward(h: i64, ds: i64) -> i64 { return qai_multimodal_forward(h, ds) }
+
+// Per-modality forward passes
+fn multimodal_text(h: i64, ds: i64) -> i64 { return qai_multimodal_forward_text(h, ds) }
+fn multimodal_audio(h: i64, ds: i64) -> i64 { return qai_multimodal_forward_audio(h, ds) }
+fn multimodal_video(h: i64, ds: i64) -> i64 { return qai_multimodal_forward_video(h, ds) }
+fn multimodal_image(h: i64, ds: i64) -> i64 { return qai_multimodal_forward_image(h, ds) }
+
+// Train all heads jointly
+fn multimodal_train(h: i64, ds: i64, epochs: int, lr: float) {
+    qai_multimodal_train(h, ds, epochs, lr, 1)
+}
+fn multimodal_train_quiet(h: i64, ds: i64, epochs: int, lr: float) {
+    qai_multimodal_train(h, ds, epochs, lr, 0)
+}
+
+// Generation
+fn multimodal_gen_text(h: i64, ds: i64, max_tokens: int) -> int {
+    return qai_multimodal_gen_text(h, ds, max_tokens)
+}
+fn multimodal_gen_audio(h: i64, ds: i64, n_frames: int) -> i64 {
+    return qai_multimodal_gen_audio(h, ds, n_frames)
+}
+fn multimodal_gen_image(h: i64, ds: i64) -> i64 {
+    return qai_multimodal_gen_image(h, ds)
+}
+
+// ── Chat Interface ──────────────────────────────────────────────────
+extern "C" {
+    fn qai_chat_new(seq: i64) -> i64
+    fn qai_chat_free(h: i64)
+    fn qai_chat_respond(h: i64, msg: string)
+    fn qai_chat_loop(h: i64)
+    fn qai_chat_stats(h: i64)
+    fn qai_chat_set_system(h: i64, prompt: string)
+    fn qai_chat_set_temp(h: i64, temperature: float)
+    fn qai_chat_set_modality(h: i64, modality: string)
+    fn qai_chat_history_len(h: i64) -> int
+    fn qai_distill(teacher: i64, student: i64, ds: i64, epochs: int, temperature: float, verbose: int)
+    fn qai_model_merge(a: i64, b: i64, alpha: float) -> i64
+}
+
+// Create a chat session from a trained model.
+// After training call: let chat = qai.chat_new(model)
+// Then: qai.chat_respond(chat, "hello") to get a response
+// Or:   qai.chat_loop(chat) for interactive stdin chat
+fn chat_new(seq: i64) -> i64 { return qai_chat_new(seq) }
+fn chat_free(h: i64) { qai_chat_free(h) }
+fn chat_respond(h: i64, message: string) { qai_chat_respond(h, message) }
+fn chat_loop(h: i64) { qai_chat_loop(h) }
+fn chat_stats(h: i64) { qai_chat_stats(h) }
+fn chat_set_system(h: i64, prompt: string) { qai_chat_set_system(h, prompt) }
+fn chat_set_temp(h: i64, temperature: float) { qai_chat_set_temp(h, temperature) }
+fn chat_set_modality(h: i64, modality: string) { qai_chat_set_modality(h, modality) }
+fn chat_history_len(h: i64) -> int { return qai_chat_history_len(h) }
+
+// Knowledge distillation: teacher model trains student model.
+// The teacher shares its learned "soft labels" so the student
+// learns not just what the answer is, but HOW CONFIDENT the
+// teacher is — like reading another mind's reasoning, not just answers.
+// temperature: higher = softer distributions = more knowledge transfer
+fn distill(teacher: i64, student: i64, ds: i64, epochs: int, temperature: float) {
+    qai_distill(teacher, student, ds, epochs, temperature, 1)
+}
+
+// Merge two models by interpolating their weights.
+// alpha=1.0 means all model A, alpha=0.0 means all model B
+fn model_merge(a: i64, b: i64, alpha: float) -> i64 {
+    return qai_model_merge(a, b, alpha)
+}
+
+// ── Real data loading and proper model creation ─────────────────────
+extern "C" {
+    fn qai_create_for_dataset(task: string, n_features: int, n_classes: int) -> i64
+    fn qai_download_dataset(name: string, out_path: string) -> int
+    fn qai_load_csv(path: string, n_features: int, label_col: int, skip_header: int) -> i64
+}
+
+// Create a model with correct architecture for your data dimensions.
+// This is the RIGHT way to use create() — always pass your actual
+// feature count and number of output classes.
+// Examples:
+//   let model = qai.create_for("classifier", 4, 3)  // iris: 4 features, 3 classes
+//   let model = qai.create_for("regressor",  8, 1)  // 8 features, 1 output
+//   let model = qai.create_for("binary",    13, 2)  // 13 features, binary output
+fn create_for(task: string, n_features: int, n_classes: int) -> i64 {
+    return qai_create_for_dataset(task, n_features, n_classes)
+}
+
+// Download a built-in dataset from GitHub
+// Available: "iris", "titanic", "diabetes", "housing", "wine", "mnist_sample"
+// Returns 1 on success, 0 on failure
+fn download_dataset(name: string, save_path: string) -> bool {
+    return qai_download_dataset(name, save_path) != 0
+}
+
+// Load a CSV file as a Dataset
+// n_features: number of input columns
+// label_col:  which column index is the label/target (0-indexed)
+// skip_header: 1 to skip the first row, 0 to include it
+fn load_csv(path: string, n_features: int, label_col: int, skip_header: int) -> i64 {
+    return qai_load_csv(path, n_features, label_col, skip_header)
+}
+
+// ── Deep Learning: RNN, LSTM, GRU, CNN ─────────────────────────────
+// Full implementations with real math — not stubs.
+
+extern "C" {
+    fn qai_rnn_new(input_size: int, hidden_size: int, n_outputs: int, bidirectional: int) -> i64
+    fn qai_rnn_free(h: i64)
+    fn qai_rnn_summary(h: i64)
+    fn qai_rnn_n_params(h: i64) -> int
+    fn qai_rnn_forward(h: i64, ds: i64) -> i64
+    fn qai_lstm_layer_new(input_size: int, hidden_size: int, n_layers: int, n_outputs: int) -> i64
+    fn qai_lstm_layer_free(h: i64)
+    fn qai_lstm_layer_summary(h: i64)
+    fn qai_lstm_layer_n_params(h: i64) -> int
+    fn qai_lstm_layer_forward(h: i64, ds: i64) -> i64
+    fn qai_gru_layer_new(input_size: int, hidden_size: int, n_outputs: int) -> i64
+    fn qai_gru_layer_free(h: i64)
+    fn qai_gru_layer_summary(h: i64)
+    fn qai_gru_layer_n_params(h: i64) -> int
+    fn qai_gru_layer_forward(h: i64, ds: i64) -> i64
+    fn qai_cnn_new(in_channels: int, n_outputs: int) -> i64
+    fn qai_cnn_free(h: i64)
+    fn qai_cnn_summary(h: i64)
+    fn qai_cnn_n_params(h: i64) -> int
+    fn qai_cnn_forward(h: i64, ds: i64) -> i64
+    fn qai_autotrainer_new(seq: i64) -> i64
+    fn qai_autotrainer_free(h: i64)
+    fn qai_autotrainer_set_target_acc(h: i64, acc: float)
+    fn qai_autotrainer_set_target_loss(h: i64, loss: float)
+    fn qai_autotrainer_set_max_epochs(h: i64, n: int)
+    fn qai_autotrainer_set_patience(h: i64, n: int)
+    fn qai_autotrainer_fit(h: i64, ds: i64)
+    fn qai_autotrainer_reached_target(h: i64) -> int
+    fn qai_autotrainer_best_acc(h: i64) -> float
+    fn qai_autotrainer_best_loss(h: i64) -> float
+    fn qai_autotrainer_epochs_trained(h: i64) -> int
+    fn qai_analyze_dataset(ds: i64) -> i64
+    fn qai_analysis_free(h: i64)
+    fn qai_analysis_recommended_lr(h: i64) -> float
+    fn qai_analysis_recommended_epochs(h: i64) -> int
+    fn qai_analysis_recommended_batch(h: i64) -> int
+    fn qai_analysis_create_model(h: i64) -> i64
+    fn qai_analysis_n_issues(h: i64) -> int
+}
+
+// RNN — Recurrent Neural Network for sequences
+// Good for: time series, sensor data, stock prices
+// input_size: features per time step
+// hidden_size: internal memory size (try 64-256)
+// n_outputs: classes or regression outputs
+fn rnn_new(input_size: int, hidden_size: int, n_outputs: int) -> i64 {
+    return qai_rnn_new(input_size, hidden_size, n_outputs, 0)
+}
+fn rnn_bidirectional(input_size: int, hidden_size: int, n_outputs: int) -> i64 {
+    return qai_rnn_new(input_size, hidden_size, n_outputs, 1)
+}
+fn rnn_free(h: i64) { qai_rnn_free(h) }
+fn rnn_summary(h: i64) { qai_rnn_summary(h) }
+fn rnn_n_params(h: i64) -> int { return qai_rnn_n_params(h) }
+fn rnn_forward(h: i64, ds: i64) -> i64 { return qai_rnn_forward(h, ds) }
+
+// LSTM — Long Short-Term Memory
+// Best for: text, language, long sequences with long-range dependencies
+// n_layers: stacked LSTM depth (1-3 typical)
+fn lstm_new(input_size: int, hidden_size: int, n_layers: int, n_outputs: int) -> i64 {
+    return qai_lstm_layer_new(input_size, hidden_size, n_layers, n_outputs)
+}
+fn lstm_free(h: i64) { qai_lstm_layer_free(h) }
+fn lstm_summary(h: i64) { qai_lstm_layer_summary(h) }
+fn lstm_n_params(h: i64) -> int { return qai_lstm_layer_n_params(h) }
+fn lstm_forward(h: i64, ds: i64) -> i64 { return qai_lstm_layer_forward(h, ds) }
+
+// GRU — Gated Recurrent Unit
+// Faster than LSTM, often similar accuracy. Good default for sequences.
+fn gru_new(input_size: int, hidden_size: int, n_outputs: int) -> i64 {
+    return qai_gru_layer_new(input_size, hidden_size, n_outputs)
+}
+fn gru_free(h: i64) { qai_gru_layer_free(h) }
+fn gru_summary(h: i64) { qai_gru_layer_summary(h) }
+fn gru_n_params(h: i64) -> int { return qai_gru_layer_n_params(h) }
+fn gru_forward(h: i64, ds: i64) -> i64 { return qai_gru_layer_forward(h, ds) }
+
+// CNN — 1D Convolutional Neural Network
+// Good for: pattern detection in sequences, text classification, audio
+fn cnn_new(in_channels: int, n_outputs: int) -> i64 {
+    return qai_cnn_new(in_channels, n_outputs)
+}
+fn cnn_free(h: i64) { qai_cnn_free(h) }
+fn cnn_summary(h: i64) { qai_cnn_summary(h) }
+fn cnn_n_params(h: i64) -> int { return qai_cnn_n_params(h) }
+fn cnn_forward(h: i64, ds: i64) -> i64 { return qai_cnn_forward(h, ds) }
+
+// AutoTrainer — train until you reach your target accuracy/loss
+// The system adjusts learning rate automatically and stops when done.
+// Example:
+//   let trainer = qai.auto_train(model)
+//   qai.auto_train_target_acc(trainer, 0.90)   // stop at 90% accuracy
+//   qai.auto_train_target_loss(trainer, 0.05)  // or when loss < 0.05
+//   qai.auto_train_fit(trainer, ds)
+//   println(qai.auto_train_reached_target(trainer))
+fn auto_train(seq: i64) -> i64 { return qai_autotrainer_new(seq) }
+fn auto_train_free(h: i64) { qai_autotrainer_free(h) }
+fn auto_train_target_acc(h: i64, accuracy: float) { qai_autotrainer_set_target_acc(h, accuracy) }
+fn auto_train_target_loss(h: i64, loss: float) { qai_autotrainer_set_target_loss(h, loss) }
+fn auto_train_max_epochs(h: i64, n: int) { qai_autotrainer_set_max_epochs(h, n) }
+fn auto_train_patience(h: i64, n: int) { qai_autotrainer_set_patience(h, n) }
+fn auto_train_fit(h: i64, ds: i64) { qai_autotrainer_fit(h, ds) }
+fn auto_train_reached_target(h: i64) -> bool { return qai_autotrainer_reached_target(h) != 0 }
+fn auto_train_best_acc(h: i64) -> float { return qai_autotrainer_best_acc(h) }
+fn auto_train_best_loss(h: i64) -> float { return qai_autotrainer_best_loss(h) }
+fn auto_train_epochs(h: i64) -> int { return qai_autotrainer_epochs_trained(h) }
+
+// Dataset Analysis — auto-detect issues and get recommendations
+// Call this before training to understand your data and get the right config.
+// Example:
+//   let analysis = qai.analyze(ds)
+//   let model = qai.analysis_create_model(analysis)
+//   qai.seq_compile(model, "adam", "cross_entropy", qai.analysis_lr(analysis))
+fn analyze(ds: i64) -> i64 { return qai_analyze_dataset(ds) }
+fn analysis_free(h: i64) { qai_analysis_free(h) }
+fn analysis_lr(h: i64) -> float { return qai_analysis_recommended_lr(h) }
+fn analysis_epochs(h: i64) -> int { return qai_analysis_recommended_epochs(h) }
+fn analysis_batch(h: i64) -> int { return qai_analysis_recommended_batch(h) }
+fn analysis_create_model(h: i64) -> i64 { return qai_analysis_create_model(h) }
+fn analysis_n_issues(h: i64) -> int { return qai_analysis_n_issues(h) }

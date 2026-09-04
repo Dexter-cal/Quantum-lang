@@ -1,0 +1,126 @@
+// Quantum standard library — collections module
+//
+// Scalar-only range utilities and classic algorithms (int/float/bool, no
+// arrays). For array-based utilities (sum, sort, search, etc.), see
+// collections_arrays.qtm instead — this module is kept as-is since
+// scalar-only code has no reason to change now that arrays work.
+//
+// Usage:
+//     import collections
+//     fn main() {
+//         println(range_sum(1, 10))
+//     }
+
+// ── Range / counting helpers ─────────────────────────────────────────
+
+fn range_sum(start: int, end: int) -> int {
+    let mut total = 0
+    let mut i = start
+    while i <= end {
+        total += i
+        i += 1
+    }
+    return total
+}
+
+fn range_product(start: int, end: int) -> int {
+    let mut total = 1
+    let mut i = start
+    while i <= end {
+        total *= i
+        i += 1
+    }
+    return total
+}
+
+fn range_count_even(start: int, end: int) -> int {
+    let mut count = 0
+    let mut i = start
+    while i <= end {
+        if i % 2 == 0 {
+            count += 1
+        }
+        i += 1
+    }
+    return count
+}
+
+// ── Simple counters (a tiny stand-in for a "bag"/multiset of one value) ──
+
+fn count_occurrences_of_digit(n: int, digit: int) -> int {
+    let mut count = 0
+    let mut remaining = n
+    if remaining < 0 {
+        remaining = 0 - remaining
+    }
+    while remaining > 0 {
+        if remaining % 10 == digit {
+            count += 1
+        }
+        remaining = remaining / 10
+    }
+    return count
+}
+
+// ── Comparison helpers (3-way min/max without arrays) ───────────────────
+
+fn max3(a: int, b: int, c: int) -> int {
+    let mut m = a
+    if b > m { m = b }
+    if c > m { m = c }
+    return m
+}
+
+fn min3(a: int, b: int, c: int) -> int {
+    let mut m = a
+    if b < m { m = b }
+    if c < m { m = c }
+    return m
+}
+
+// ── Classic algorithms that only need scalars ───────────────────────────
+
+fn is_prime(n: int) -> bool {
+    if n < 2 {
+        return false
+    }
+    let mut i = 2
+    while i * i <= n {
+        if n % i == 0 {
+            return false
+        }
+        i += 1
+    }
+    return true
+}
+
+fn gcd(a: int, b: int) -> int {
+    let mut x = a
+    let mut y = b
+    while y != 0 {
+        let temp = y
+        y = x % y
+        x = temp
+    }
+    return x
+}
+
+fn lcm(a: int, b: int) -> int {
+    return (a * b) / gcd(a, b)
+}
+
+fn fibonacci(n: int) -> int {
+    if n <= 1 {
+        return n
+    }
+    let mut a = 0
+    let mut b = 1
+    let mut i = 2
+    while i <= n {
+        let next = a + b
+        a = b
+        b = next
+        i += 1
+    }
+    return b
+}

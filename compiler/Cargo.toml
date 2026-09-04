@@ -1,0 +1,21 @@
+[package]
+name = "quantum-compiler"
+version.workspace = true
+edition.workspace = true
+
+[lib]
+name = "quantum_compiler"
+path = "src/lib.rs"
+
+[[bin]]
+name = "quantumc"
+path = "src/main.rs"
+
+[dependencies]
+logos.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+colored.workspace = true
+quantum-stdlib = { path = "../stdlib" }

@@ -1,0 +1,122 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Quantum",
+  "scopeName": "source.quantum",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#types"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.quantum",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.quantum",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.quantum",
+          "match": "\\b(if|else|elif|while|for|loop|break|continue|return|match|switch)\\b"
+        },
+        {
+          "name": "keyword.other.quantum",
+          "match": "\\b(fn|function|def|let|var|const|mut|mutable|struct|class|enum|trait|interface|impl|import|use|require|from|as|pub|public|async|await|model|trainer|self|super)\\b"
+        },
+        {
+          "name": "constant.language.quantum",
+          "match": "\\b(true|yes|false|no|null|nil|none)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.quantum",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.quantum",
+              "match": "\\\\(n|t|r|\\\\|\"|')"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.quantum",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.quantum",
+              "match": "\\\\(n|t|r|\\\\|\"|')"
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.quantum",
+          "match": "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?([eE][+-]?[0-9]+)?\\b"
+        },
+        {
+          "name": "constant.numeric.hex.quantum",
+          "match": "\\b0[xX][0-9a-fA-F_]+\\b"
+        },
+        {
+          "name": "constant.numeric.binary.quantum",
+          "match": "\\b0[bB][01_]+\\b"
+        },
+        {
+          "name": "constant.numeric.octal.quantum",
+          "match": "\\b0[oO][0-7_]+\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "entity.name.function.quantum",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()"
+        },
+        {
+          "name": "support.function.builtin.quantum",
+          "match": "\\b(print|println|assert|assert_eq)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.quantum",
+          "match": "\\b(int|i8|i16|i32|i64|i128|uint|u8|u16|u32|u64|u128|float|f32|f64|bool|char|String|void)\\b"
+        }
+      ]
+    }
+  }
+}

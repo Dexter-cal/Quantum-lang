@@ -1,0 +1,120 @@
+// Quantum standard library — math module
+//
+// Wraps the C standard math library (libm) so Quantum programs get full
+// access to trigonometry, exponentials, rounding, and more without writing
+// any extern blocks themselves.
+//
+// Usage:
+//     import math
+//     fn main() {
+//         println(math_sqrt(16.0))
+//         println(math_pow(2.0, 10.0))
+//     }
+//
+// Note: Quantum doesn't have namespaced imports yet (no `math.sqrt(...)`),
+// so every function here is prefixed with `math_` to avoid collisions with
+// user-defined functions in the importing file. This is the same
+// convention other minimal-namespace languages (C, early Go) used before
+// proper module systems existed.
+
+extern "C" {
+    // ── Power & roots ──────────────────────────────────────────────────
+    fn pow(base: float, exp: float) -> float
+    fn sqrt(x: float) -> float
+    fn cbrt(x: float) -> float
+
+    // ── Trigonometry (radians) ────────────────────────────────────────
+    fn sin(x: float) -> float
+    fn cos(x: float) -> float
+    fn tan(x: float) -> float
+    fn asin(x: float) -> float
+    fn acos(x: float) -> float
+    fn atan(x: float) -> float
+    fn atan2(y: float, x: float) -> float
+
+    // ── Hyperbolic ─────────────────────────────────────────────────────
+    fn sinh(x: float) -> float
+    fn cosh(x: float) -> float
+    fn tanh(x: float) -> float
+
+    // ── Exponential & logarithm ───────────────────────────────────────
+    fn exp(x: float) -> float
+    fn log(x: float) -> float
+    fn log2(x: float) -> float
+    fn log10(x: float) -> float
+
+    // ── Rounding ───────────────────────────────────────────────────────
+    fn floor(x: float) -> float
+    fn ceil(x: float) -> float
+    fn round(x: float) -> float
+    fn trunc(x: float) -> float
+
+    // ── Misc ───────────────────────────────────────────────────────────
+    fn fabs(x: float) -> float
+    fn fmod(x: float, y: float) -> float
+    fn hypot(x: float, y: float) -> float
+}
+
+// ── Friendly wrapper names (math_ prefix) ───────────────────────────────
+// These just forward to the extern declarations above, giving callers a
+// clearly-namespaced, won't-collide-with-anything name.
+
+fn math_pow(base: float, exp: float) -> float { return pow(base, exp) }
+fn math_sqrt(x: float) -> float { return sqrt(x) }
+fn math_cbrt(x: float) -> float { return cbrt(x) }
+
+fn math_sin(x: float) -> float { return sin(x) }
+fn math_cos(x: float) -> float { return cos(x) }
+fn math_tan(x: float) -> float { return tan(x) }
+fn math_asin(x: float) -> float { return asin(x) }
+fn math_acos(x: float) -> float { return acos(x) }
+fn math_atan(x: float) -> float { return atan(x) }
+fn math_atan2(y: float, x: float) -> float { return atan2(y, x) }
+
+fn math_sinh(x: float) -> float { return sinh(x) }
+fn math_cosh(x: float) -> float { return cosh(x) }
+fn math_tanh(x: float) -> float { return tanh(x) }
+
+fn math_exp(x: float) -> float { return exp(x) }
+fn math_log(x: float) -> float { return log(x) }
+fn math_log2(x: float) -> float { return log2(x) }
+fn math_log10(x: float) -> float { return log10(x) }
+
+fn math_floor(x: float) -> float { return floor(x) }
+fn math_ceil(x: float) -> float { return ceil(x) }
+fn math_round(x: float) -> float { return round(x) }
+fn math_trunc(x: float) -> float { return trunc(x) }
+
+fn math_abs(x: float) -> float { return fabs(x) }
+fn math_mod(x: float, y: float) -> float { return fmod(x, y) }
+fn math_hypot(x: float, y: float) -> float { return hypot(x, y) }
+
+// ── Constants (Quantum has no `const float`, so these are functions) ───
+fn math_pi() -> float { return 3.14159265358979323846 }
+fn math_e() -> float { return 2.71828182845904523536 }
+fn math_tau() -> float { return 6.28318530717958647693 }
+
+// ── Pure-Quantum helpers (no libm needed) ───────────────────────────────
+fn math_max(a: float, b: float) -> float {
+    if a > b {
+        return a
+    }
+    return b
+}
+
+fn math_min(a: float, b: float) -> float {
+    if a < b {
+        return a
+    }
+    return b
+}
+
+fn math_clamp(x: float, lo: float, hi: float) -> float {
+    if x < lo {
+        return lo
+    }
+    if x > hi {
+        return hi
+    }
+    return x
+}

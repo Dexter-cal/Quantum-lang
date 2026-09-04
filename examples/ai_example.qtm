@@ -1,0 +1,212 @@
+// ═══════════════════════════════════════════════════════════
+// Quantum Language v2.1 — AI/ML Example
+// Demonstrates the full QuantumAI integration
+// Run: quantumc run ai_example.qtm
+// ═══════════════════════════════════════════════════════════
+
+import quantumai as qai
+import quantumai.ml as ml
+import quantumai.nlp as nlp
+import quantumai.data as data
+
+// ── 1. Neural network (3-liner API) ──────────────────────
+fn demo_quick_model() {
+    println("=== Quick Neural Net ===")
+    let model = qai.create("classifier")   // auto-configured
+    model.summary()
+
+    let dataset = data.make_classification(n: 500, features: 10, classes: 4)
+    dataset.normalize()
+    let (train, test) = dataset.train_test_split(0.2)
+
+    model.fit(train.x, train.y, epochs: 80, batch_size: 32)
+    let metrics = model.evaluate(test.x, test.y)
+    println("Accuracy: " + metrics["accuracy"])
+}
+
+// ── 2. Custom neural architecture ────────────────────────
+fn demo_custom_net() {
+    println("=== Custom Deep Net ===")
+    let model = qai.Sequential::new()
+    model.dense(64, 256, "relu")
+    model.batchnorm(256)
+    model.dropout(0.3)
+    model.dense(256, 128, "gelu")
+    model.layernorm(128)
+    model.dropout(0.2)
+    model.dense(128, 10, "softmax")
+    model.compile("adamw", "cross_entropy", lr: 0.001)
+    model.summary()
+
+    let x = qai.Tensor::randn([100, 64])
+    let y_raw = qai.Tensor::zeros([100, 10])
+    // one-hot labels set by index
+    for i in 0..100 {
+        y_raw[i, i % 10] = 1.0
+    }
+    model.fit(x, y_raw, epochs: 40, batch_size: 16, verbose: true)
+    model.save_weights("my_model.json")
+}
+
+// ── 3. All optimizers ────────────────────────────────────
+fn demo_optimizers() {
+    println("=== Optimizer Comparison ===")
+    let optimizers = ["adam", "adamw", "sgd", "rmsprop", "adagrad", "nadam"]
+    let dataset = data.make_classification(200, 8, 3)
+
+    for opt in optimizers {
+        let m = qai.Sequential::new()
+        m.dense(8, 64, "relu")
+        m.dense(64, 3, "softmax")
+        m.compile(opt, "cross_entropy", lr: 0.01)
+        m.fit(dataset.x, dataset.y, epochs: 30, batch_size: 32, verbose: false)
+        let ev = m.evaluate(dataset.x, dataset.y)
+        println(opt + ": acc=" + ev["accuracy"])
+    }
+}
+
+// ── 4. Regression ────────────────────────────────────────
+fn demo_regression() {
+    println("=== Regression ===")
+    // Classic ML
+    let ds = data.make_sine(200)
+    let mut lr_model = ml.LinearRegression::new()
+    lr_model.lr = 0.01
+    lr_model.epochs = 500
+    lr_model.fit(ds.x, ds.y)
+    println("LinearRegression R²=" + lr_model.r2_score(ds.x, ds.y))
+
+    // Neural regression
+    let net = qai.Sequential::new()
+    net.dense(1, 64, "gelu")
+    net.dense(64, 32, "gelu")
+    net.dense(32, 1, "linear")
+    net.compile("adam", "mse", lr: 0.001)
+    net.fit(ds.x, ds.y, epochs: 150, batch_size: 16)
+    let ev = net.evaluate(ds.x, ds.y)
+    println("Neural net MSE=" + ev["mse"])
+}
+
+// ── 5. NLP ────────────────────────────────────────────────
+fn demo_nlp() {
+    println("=== NLP Pipeline ===")
+    let texts = [
+        "amazing product love it highly recommend",
+        "terrible quality awful waste of money",
+        "great value excellent service outstanding",
+        "horrible broken disappointing garbage",
+    ]
+    let labels = [1, 0, 1, 0]   // 1=positive 0=negative
+
+    // Tokenize
+    let tok = nlp.Tokenizer::new(200)
+    tok.fit(texts)
+    println("Vocab size: " + tok.vocab_size())
+
+    // Build sentiment model
+    let model = qai.Sequential::new()
+    model.embedding(tok.vocab_size(), 32)
+    model.dense(32, 64, "relu")
+    model.dense(64, 2, "softmax")
+    model.compile("adam", "cross_entropy", lr: 0.01)
+
+    let x = tok.encode_batch(texts, max_len: 10)
+    let y = data.one_hot(labels, n_classes: 2)
+    model.fit(x, y, epochs: 100, batch_size: 4)
+
+    // Predict
+    let test_text = "wonderful excellent amazing product"
+    let test_enc = tok.encode(test_text, max_len: 10)
+    let pred = model.predict_class(test_enc)
+    println("'" + test_text + "' => " + if pred == 1 { "POSITIVE" } else { "NEGATIVE" })
+
+    // TF-IDF
+    let (tfidf, vocab) = nlp.tfidf(texts)
+    println("TF-IDF vocab=" + len(vocab))
+}
+
+// ── 6. Clustering + Traditional ML ───────────────────────
+fn demo_traditional() {
+    println("=== Traditional ML ===")
+    let ds = data.make_classification(300, 6, 4)
+    let labels = [0, 1, 2, 3]  // example label indices
+
+    // KNN
+    let mut knn = ml.KNN::new(k: 5)
+    knn.fit(ds.x, labels)
+    println("KNN acc=" + knn.accuracy(ds.x, labels))
+
+    // Decision Tree
+    let mut dt = ml.DecisionTree::new(max_depth: 6)
+    dt.fit(ds.x, labels, n_classes: 4)
+    println("DecisionTree acc=" + dt.accuracy(ds.x, labels))
+
+    // Random Forest
+    let mut rf = ml.RandomForest::new(n_trees: 10, max_depth: 5)
+    rf.fit(ds.x, labels, n_classes: 4)
+    println("RandomForest acc=" + rf.accuracy(ds.x, labels))
+
+    // K-Means
+    let mut km = ml.KMeans::new(k: 4)
+    let clusters = km.fit(ds.x)
+    println("KMeans inertia=" + km.inertia(ds.x))
+
+    // Naive Bayes
+    let mut nb = ml.NaiveBayes::new()
+    nb.fit(ds.x, labels, n_classes: 4)
+    println("NaiveBayes acc=" + nb.accuracy(ds.x, labels))
+}
+
+// ── 7. Pre-trained models ─────────────────────────────────
+fn demo_pretrained() {
+    println("=== Pre-trained Models ===")
+    let resnet  = qai.pretrained.resnet50(pretrained: true, classes: 1000)
+    let bert    = qai.pretrained.bert_tiny(pretrained: true)
+    let yolo    = qai.pretrained.yolov8_nano()
+    let effnet  = qai.pretrained.efficientnet_b0(classes: 10)
+    let t5      = qai.pretrained.t5_small()
+    let whisper = qai.pretrained.whisper_tiny()
+    println("6 pre-trained architectures loaded")
+}
+
+// ── 8. AutoML ─────────────────────────────────────────────
+fn demo_automl() {
+    println("=== AutoML ===")
+    let ds = data.make_classification(500, 10, 4)
+    let auto = qai.AutoClassifier::new(trials: 5)
+    auto.fit(ds)
+    println("Best accuracy: " + auto.best_accuracy)
+    for result in auto.results {
+        println("  " + result.config + " -> " + result.accuracy)
+    }
+}
+
+// ── 9. Loss functions showcase ────────────────────────────
+fn demo_losses() {
+    println("=== Loss Functions ===")
+    let pred   = qai.Tensor::new([0.8, 0.1, 0.1], shape: [1, 3])
+    let target = qai.Tensor::new([1.0, 0.0, 0.0], shape: [1, 3])
+
+    let losses = ["mse", "mae", "cross_entropy", "focal", "huber", "kl_divergence"]
+    for loss_name in losses {
+        let loss_fn = qai.Loss::from_str(loss_name)
+        let val = loss_fn.compute(pred, target)
+        println("  " + loss_name + ": " + val)
+    }
+}
+
+// ── Main ──────────────────────────────────────────────────
+fn main() {
+    println("Quantum Language v2.1 — AI Demo")
+    println("================================")
+    demo_quick_model()
+    demo_custom_net()
+    demo_optimizers()
+    demo_regression()
+    demo_nlp()
+    demo_traditional()
+    demo_pretrained()
+    demo_automl()
+    demo_losses()
+    println("All demos complete!")
+}

@@ -1,0 +1,195 @@
+// Pattern Matching Example - Powerful matching in Quantum
+
+// Enum with data
+enum Shape {
+    Circle(float),           // radius
+    Rectangle(float, float), // width, height
+    Triangle(float, float, float) // sides
+}
+
+enum Color {
+    RGB(int, int, int),
+    HSL(int, int, int),
+    Named(String)
+}
+
+enum Option<T> {
+    Some(T),
+    None
+}
+
+enum Result<T, E> {
+    Ok(T),
+    Err(E)
+}
+
+// Basic pattern matching
+fn describe_number(n: int) -> String {
+    match n {
+        0 => "zero",
+        1 => "one",
+        2 => "two",
+        3..=10 => "between three and ten",
+        _ => "something else"
+    }
+}
+
+// Match with guards
+fn classify(n: int) -> String {
+    match n {
+        x if x < 0 => "negative",
+        x if x == 0 => "zero",
+        x if x > 0 && x < 10 => "small positive",
+        x if x >= 10 => "large positive",
+        _ => "unreachable"
+    }
+}
+
+// Destructuring in match
+fn area(shape: Shape) -> float {
+    match shape {
+        Circle(r) => 3.14159 * r * r,
+        Rectangle(w, h) => w * h,
+        Triangle(a, b, c) => {
+            // Heron's formula
+            let s = (a + b + c) / 2.0
+            sqrt(s * (s - a) * (s - b) * (s - c))
+        }
+    }
+}
+
+// Matching tuples
+fn point_location(point: (int, int)) -> String {
+    match point {
+        (0, 0) => "origin",
+        (x, 0) => f"on x-axis at {x}",
+        (0, y) => f"on y-axis at {y}",
+        (x, y) if x == y => f"on diagonal at ({x}, {y})",
+        (x, y) if x > 0 && y > 0 => "first quadrant",
+        (x, y) if x < 0 && y > 0 => "second quadrant",
+        (x, y) if x < 0 && y < 0 => "third quadrant",
+        (x, y) if x > 0 && y < 0 => "fourth quadrant",
+        _ => "somewhere"
+    }
+}
+
+// Matching Option
+fn unwrap_or_default(opt: Option<int>) -> int {
+    match opt {
+        Some(value) => value,
+        None => 0
+    }
+}
+
+// Matching Result
+fn handle_result(result: Result<String, String>) {
+    match result {
+        Ok(value) => {
+            print("Success!")
+            print(value)
+        }
+        Err(error) => {
+            print("Error!")
+            print(error)
+        }
+    }
+}
+
+// Nested matching
+fn complex_match(value: Option<Result<int, String>>) -> String {
+    match value {
+        Some(Ok(n)) if n > 0 => f"Positive: {n}",
+        Some(Ok(n)) if n < 0 => f"Negative: {n}",
+        Some(Ok(0)) => "Zero",
+        Some(Err(e)) => f"Error: {e}",
+        None => "No value"
+    }
+}
+
+// Matching arrays
+fn match_array(arr: [int]) -> String {
+    match arr {
+        [] => "empty",
+        [x] => f"single element: {x}",
+        [x, y] => f"two elements: {x}, {y}",
+        [first, .., last] => f"starts with {first}, ends with {last}",
+        _ => "other"
+    }
+}
+
+// Matching structs
+struct Point {
+    x: int,
+    y: int
+}
+
+fn match_point(p: Point) -> String {
+    match p {
+        Point { x: 0, y: 0 } => "origin",
+        Point { x: 0, y } => f"on y-axis at {y}",
+        Point { x, y: 0 } => f"on x-axis at {x}",
+        Point { x, y } => f"at ({x}, {y})"
+    }
+}
+
+// if-let pattern
+fn if_let_example(opt: Option<int>) {
+    if let Some(value) = opt {
+        print(f"Got value: {value}")
+    } else {
+        print("No value")
+    }
+}
+
+// while-let pattern
+fn while_let_example(values: [Option<int>]) {
+    let mut i = 0
+    while let Some(value) = values[i] {
+        print(f"Processing: {value}")
+        i = i + 1
+    }
+}
+
+// Match expressions in assignments
+fn match_assignment() {
+    let status = match check_condition() {
+        true => "success",
+        false => "failure"
+    }
+
+    let number = match get_option() {
+        Some(n) => n,
+        None => -1
+    }
+}
+
+fn main() {
+    // Test basic matching
+    print(describe_number(5))
+    print(classify(-5))
+
+    // Test shape matching
+    let circle = Circle(5.0)
+    print(f"Circle area: {area(circle)}")
+
+    let rect = Rectangle(4.0, 5.0)
+    print(f"Rectangle area: {area(rect)}")
+
+    // Test point matching
+    let origin = (0, 0)
+    print(point_location(origin))
+
+    let point = (3, 4)
+    print(point_location(point))
+
+    // Test Option matching
+    let some_value = Some(42)
+    print(f"Unwrapped: {unwrap_or_default(some_value)}")
+
+    let no_value = None
+    print(f"Default: {unwrap_or_default(no_value)}")
+
+    // Test if-let
+    if_let_example(Some(100))
+    if_let_example(None)
+}

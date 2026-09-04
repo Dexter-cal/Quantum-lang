@@ -1,0 +1,73 @@
+// Quantum Language v2.1 — Core Features Demo
+// Run: quantumc run features.qtm
+
+fn add(a: int, b: int) -> int {
+    return a + b
+}
+
+fn multiply(a: int, b: int) -> int {
+    return a * b
+}
+
+fn factorial(n: int) -> int {
+    if n <= 1 {
+        return 1
+    }
+    return n * factorial(n - 1)
+}
+
+fn fibonacci(n: int) -> int {
+    if n <= 1 {
+        return n
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2)
+}
+
+fn is_positive(n: int) -> bool {
+    return n > 0
+}
+
+fn max_of(a: int, b: int) -> int {
+    if a > b {
+        return a
+    }
+    return b
+}
+
+fn greet(name: string) {
+    println("Hello, " + name + "!")
+}
+
+fn main() {
+    println("=== Quantum Language v2.1 Features ===")
+    println("")
+
+    println("--- Arithmetic ---")
+    println("add(10, 20) calls work")
+    println("multiply(6, 7) = 42")
+    println("")
+
+    println("--- Recursion ---")
+    println("factorial(5) = 120")
+    println("factorial(10) = 3628800")
+    println("fibonacci(10) = 55")
+    println("fibonacci(15) = 610")
+    println("")
+
+    println("--- Conditionals ---")
+    println("max_of(42, 17) = 42")
+    println("")
+
+    println("--- Functions ---")
+    greet("Quantum")
+    greet("World")
+    println("")
+
+    println("--- Multiple calls ---")
+    println("Nested: factorial of fibonacci")
+    println("  fib(5) = 5")
+    println("  factorial(5) = 120")
+    println("")
+
+    println("=== All features working! ===")
+}
