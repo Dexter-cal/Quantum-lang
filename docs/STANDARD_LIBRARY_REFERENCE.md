@@ -5,16 +5,17 @@ Welcome to the **Quantum Standard Library Reference**. This guide documents all 
 ---
 
 ## Table of Contents
-1. [Overview & Importing](#overview)
+1. [Overview & Ecosystem Architecture](#overview)
 2. [Operating System (`os.qtm`)](#osqtm)
 3. [Date & Time (`time.qtm`)](#timeqtm)
 4. [Terminal UI (`ui.qtm`)](#uiqtm)
-5. [Mathematics (`math.qtm`)](#mathqtm)
-6. [String Utilities (`strings.qtm`)](#stringsqtm)
-7. [Vector Operations (`vec.qtm`)](#vecqtm)
-8. [HashMaps (`hashmap.qtm`)](#hashmapqtm)
-9. [Collections & Arrays (`collections_arrays.qtm`)](#collections_arraysqtm)
-10. [QuantumAI Framework (`ai.qtm`)](#aiqtm)
+5. [JSON Parsing (`json.qtm`)](#jsonqtm)
+6. [Mathematics (`math.qtm`)](#mathqtm)
+7. [String Utilities (`strings.qtm`)](#stringsqtm)
+8. [Vector Operations (`vec.qtm`)](#vecqtm)
+9. [HashMaps (`hashmap.qtm`)](#hashmapqtm)
+10. [Collections & Arrays (`collections_arrays.qtm`)](#collections_arraysqtm)
+11. [QuantumAI Framework (`ai.qtm`)](#aiqtm)
 
 ---
 
@@ -26,6 +27,7 @@ Quantum standard library modules live in the `qtm-std/` folder. They can be impo
 import os
 import time
 import ui
+import json
 import math
 
 fn main() {
@@ -106,6 +108,28 @@ fn main() {
     println(ui.cyan("Processing task..."))
     ui.progress_bar(75, 20)
     ui.draw_box("Status", ui.green("Operation complete!"))
+}
+```
+
+---
+
+## `json.qtm` — JSON Parsing Module
+
+Provides lightweight JSON key-value extraction and parsing.
+
+### Functions
+- `json_get_string(json_str: string, key: string) -> string` — Extracts string value for key.
+- `json_get_int(json_str: string, key: string) -> int` — Extracts integer value for key.
+
+### Example
+```quantum
+import json
+
+fn main() {
+    let data = "{\"name\": \"Quantum\", \"version\": 2}"
+    let name = json.json_get_string(data, "name")
+    let ver  = json.json_get_int(data, "version")
+    println("App: " + name + " v" + ver.to_string())
 }
 ```
 

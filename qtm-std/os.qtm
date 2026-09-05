@@ -4,6 +4,7 @@
 extern "C" {
     fn system(cmd: string) -> int
     fn getenv(name: string) -> string
+    fn exit(code: int)
 }
 
 fn exec_cmd(command: string) -> int {
@@ -15,5 +16,5 @@ fn get_env(variable: string) -> string {
 }
 
 fn exit_process(code: int) {
-    q_file_write_text("/dev/null", "")
+    exit(code)
 }

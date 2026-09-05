@@ -1,0 +1,23 @@
+// qtm-std/json.qtm — Quantum Standard Library JSON Module
+// Light-weight JSON string extraction and value lookup
+
+fn json_get_string(json_str: string, key: string) -> string {
+    let pattern = "\"" + key + "\":"
+    if q_str_contains(json_str, pattern) != 0 {
+        let after = q_str_split_last(json_str, pattern)
+        let trimmed = q_str_trim(after)
+        if q_str_starts_with(trimmed, "\"") != 0 {
+            let val = q_str_substr(trimmed, 1, q_str_len(trimmed) - 1)
+            return q_str_split_first(val, "\"")
+        }
+    }
+    return ""
+}
+
+fn json_get_int(json_str: string, key: string) -> int {
+    let s = json_get_string(json_str, key)
+    if q_str_len(s) > 0 {
+        return q_str_parse_int(s)
+    }
+    return 0
+}
