@@ -1,0 +1,12 @@
+import time
+
+fn main() {
+    println("--- Testing Time Module ---")
+    let t0 = time.now()
+    println("Timestamp: " + t0.to_string())
+    time.sleep_ms(10)
+    let is_leap = time.is_leap_year(2024)
+    println("2024 is leap: " + is_leap.to_string())
+    let fmt = time.format_duration_sec(3665)
+    println("Formatted: " + fmt)
+}

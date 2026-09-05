@@ -1,0 +1,9 @@
+import ui
+
+fn main() {
+    println("--- Testing UI Module ---")
+    ui.print_banner("Test App", "1.0")
+    println(ui.cyan("Cyan text"))
+    ui.progress_bar(50, 10)
+    ui.draw_box("Box Title", "Box content body")
+}

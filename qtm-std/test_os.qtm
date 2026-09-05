@@ -1,0 +1,9 @@
+import os
+
+fn main() {
+    println("--- Testing OS Module ---")
+    let user = os.get_env("USER")
+    println("User: " + user)
+    let status = os.exec_cmd("echo OS exec test")
+    println("Status: " + status.to_string())
+}

@@ -183,10 +183,9 @@ fn resolve_recursive(
                         module_name, base_dir.display()
                     ))?;
 
-                // Collect alias mapping: `import foo as bar` → bar→foo
-                if let Some(alias) = &import.alias {
-                    namespace_aliases.insert(alias.clone(), module_name.clone());
-                }
+                // Collect alias mapping: `import foo as bar` → bar→foo, or `import foo` → foo→foo
+                let alias_name = import.alias.as_ref().unwrap_or(module_name);
+                namespace_aliases.insert(alias_name.clone(), module_name.clone());
                 resolve_recursive(&import_file, read_and_preprocess, visited, stack, all_items, safe_mode, namespace_aliases)?;
             }
             _ => {

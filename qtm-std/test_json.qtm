@@ -1,0 +1,10 @@
+import json
+
+fn main() {
+    println("--- Testing JSON Module ---")
+    let data = "{\"name\": \"Quantum\", \"version\": 2}"
+    let name = json.json_get_string(data, "name")
+    let ver  = json.json_get_int(data, "version")
+    println("Name: " + name)
+    println("Version: " + ver.to_string())
+}
