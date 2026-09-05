@@ -9,7 +9,7 @@ fn main() {
     println("Temp: " + system.info_temp_dir())
 
     let path = system.env_get("PATH")
-    println("PATH length: " + len(path).to_string())
+    println("PATH length: " + path.len().to_string())
     println("PATH exists: " + system.env_exists("PATH").to_string())
 
     let now_ts = system.timer_now()

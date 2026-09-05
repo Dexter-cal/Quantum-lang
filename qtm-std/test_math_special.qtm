@@ -1,0 +1,13 @@
+import math_special
+
+fn main() {
+    println("--- Testing Math Special ---")
+    let mid = math_special.lerp(10.0, 20.0, 0.5)
+    println("Lerp: " + mid.to_string())
+    let clamped = math_special.clamp01(1.5)
+    println("Clamp01: " + clamped.to_string())
+    let smooth = math_special.smoothstep(0.0, 10.0, 5.0)
+    println("Smoothstep: " + smooth.to_string())
+    let bits = math_special.popcount(15)
+    println("Popcount(15): " + bits.to_string())
+}
