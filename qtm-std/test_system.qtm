@@ -1,0 +1,19 @@
+import system
+
+fn main() {
+    println("--- Testing System Module ---")
+    println("OS Name: " + system.info_os_name())
+    println("Architecture: " + system.info_architecture())
+    println("User: " + system.info_username())
+    println("Home: " + system.info_home_dir())
+    println("Temp: " + system.info_temp_dir())
+
+    let path = system.env_get("PATH")
+    println("PATH length: " + len(path).to_string())
+    println("PATH exists: " + system.env_exists("PATH").to_string())
+
+    let now_ts = system.timer_now()
+    println("Timestamp: " + now_ts.to_string())
+    system.timer_sleep_ms(10)
+    println("System module test passed!")
+}
