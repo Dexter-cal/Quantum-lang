@@ -1,0 +1,40 @@
+// qtm-std/math_discrete.qtm — Quantum Discrete Mathematics Library
+// Factorials, permutations, combinations, greatest common divisor, least common multiple
+
+fn factorial(n: int) -> int {
+    if n <= 1 { return 1 }
+    let mut result = 1
+    let mut i = 2
+    while i <= n {
+        result = result * i
+        i = i + 1
+    }
+    return result
+}
+
+fn permutations(n: int, k: int) -> int {
+    if k > n { return 0 }
+    return factorial(n) / factorial(n - k)
+}
+
+fn combinations(n: int, k: int) -> int {
+    if k > n { return 0 }
+    return factorial(n) / (factorial(k) * factorial(n - k))
+}
+
+fn gcd(a: int, b: int) -> int {
+    let mut x = a
+    let mut y = b
+    while y != 0 {
+        let temp = y
+        y = x % y
+        x = temp
+    }
+    return x
+}
+
+fn lcm(a: int, b: int) -> int {
+    if a == 0 { return 0 }
+    if b == 0 { return 0 }
+    return (a * b) / gcd(a, b)
+}

@@ -1,0 +1,10 @@
+import math_discrete
+
+fn main() {
+    println("--- Testing Discrete Math ---")
+    println("5! = " + factorial(5).to_string())
+    println("P(5, 2) = " + permutations(5, 2).to_string())
+    println("C(5, 2) = " + combinations(5, 2).to_string())
+    println("GCD(48, 18) = " + gcd(48, 18).to_string())
+    println("LCM(4, 6) = " + lcm(4, 6).to_string())
+}

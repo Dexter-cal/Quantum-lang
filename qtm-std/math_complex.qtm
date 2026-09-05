@@ -1,0 +1,35 @@
+// qtm-std/math_complex.qtm — Quantum Complex Numbers Library
+// Complex number arithmetic, magnitude, phase, and conjugation
+
+struct Complex {
+    real: float,
+    imag: float,
+}
+
+impl Complex {
+    fn new(r: float, i: float) -> Complex {
+        return Complex { real: r, imag: i }
+    }
+
+    fn magnitude(self) -> float {
+        return (self.real * self.real + self.imag * self.imag).sqrt()
+    }
+
+    fn conjugate(self) -> Complex {
+        return Complex { real: self.real, imag: 0.0 - self.imag }
+    }
+
+    fn add(self, other: Complex) -> Complex {
+        return Complex { real: self.real + other.real, imag: self.imag + other.imag }
+    }
+
+    fn sub(self, other: Complex) -> Complex {
+        return Complex { real: self.real - other.real, imag: self.imag - other.imag }
+    }
+
+    fn mul(self, other: Complex) -> Complex {
+        let r = self.real * other.real - self.imag * other.imag
+        let i = self.real * other.imag + self.imag * other.real
+        return Complex { real: r, imag: i }
+    }
+}

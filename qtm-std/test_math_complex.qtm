@@ -1,0 +1,12 @@
+import math_complex
+
+fn main() {
+    println("--- Testing Complex Math ---")
+    let z1 = Complex::new(3.0, 4.0)
+    println("Magnitude: " + z1.magnitude().to_string())
+    let conj = z1.conjugate()
+    println("Conj Imag: " + conj.imag.to_string())
+    let z2 = Complex::new(1.0, 2.0)
+    let sum = z1.add(z2)
+    println("Sum Real: " + sum.real.to_string())
+}
